@@ -1,691 +1,522 @@
+
 import { Link } from "react-router-dom";
-import AfricanPattern from "../components/AfricanPattern";
 
 function Home() {
   return (
-    <main className="bg-[#F8F1E5] text-[#202020]">
+    <main className="bg-[#FFF9E8] text-[#3F352C]">
 
-      {/* ========================= */}
-      {/* HERO SECTION */}
-      {/* ========================= */}
+      {/* HERO */}
+      <section className="relative min-h-[680px] overflow-hidden">
+        <img
+          src="/images/home-hero.jpg"
+          alt="Community members sharing food"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-      <section className="relative overflow-hidden bg-[#1F5D42]">
-        <AfricanPattern />
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/50"></div>
 
-        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:px-10 lg:py-28">
+        <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl items-center px-6 py-24 md:px-10">
+          <div className="max-w-3xl text-white">
 
-          <div className="text-center text-white md:text-left">
-
-            <span className="inline-block rounded-full bg-[#D9A441] px-4 py-2 text-sm font-semibold text-[#202020]">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#FCD116]">
               Born in Ghana. Built for Africa.
-            </span>
+            </p>
 
-            <h1 className="mt-6 max-w-2xl text-5xl font-bold leading-tight md:text-6xl">
+            <h1 className="mt-5 text-5xl font-bold leading-tight md:text-6xl lg:text-7xl">
               Good food should
-              <span className="block text-[#D9A441]">
+              <span className="block text-[#FCD116]">
                 reach people.
               </span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-green-50 md:mx-0">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/90 md:text-xl">
               FoodBridge connects restaurants, businesses, organizations,
               and communities to help surplus food reach people who need it
               instead of going to waste.
             </p>
 
-            <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row md:justify-start">
-
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
                 to="/signup"
-                className="rounded-lg bg-[#D9A441] px-7 py-3 text-center font-bold text-[#202020] transition hover:bg-[#E5B95C]"
+                className="rounded-lg bg-[#FCD116] px-8 py-3.5 text-center font-bold text-black transition hover:bg-[#E6BC00]"
               >
                 Get Started
               </Link>
 
               <Link
                 to="/about"
-                className="rounded-lg border-2 border-white px-7 py-3 text-center font-semibold text-white transition hover:bg-white hover:text-[#1F5D42]"
+                className="rounded-lg border-2 border-white px-8 py-3.5 text-center font-semibold text-white transition hover:bg-white hover:text-[#006B3F]"
               >
-                Discover FoodBridge
+                Learn More
               </Link>
-
             </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* GHANA COLOUR STRIPE */}
+      <div className="flex h-2 w-full">
+        <div className="w-1/3 bg-[#CE1126]"></div>
+        <div className="w-1/3 bg-[#FCD116]"></div>
+        <div className="w-1/3 bg-[#006B3F]"></div>
+      </div>
+
+
+      {/* THE CHALLENGE */}
+      <section className="bg-[#FFF9E8] px-6 py-24 md:px-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-14 md:grid-cols-2">
+
+          <div>
+            <p className="font-bold uppercase tracking-wider text-[#CE1126]">
+              The Challenge
+            </p>
+
+            <h2 className="mt-3 text-3xl font-bold leading-tight text-[#006B3F] md:text-4xl">
+              Good food can become surplus while people still need it.
+            </h2>
+
+            <p className="mt-6 leading-8 text-[#6B5E52]">
+              Restaurants, caterers, hotels, supermarkets and other
+              organizations may have edible food left over after daily
+              operations.
+            </p>
+
+            <p className="mt-5 leading-8 text-[#6B5E52]">
+              At the same time, individuals, charities and community
+              organizations may need access to food.
+            </p>
+
+            <p className="mt-5 border-l-4 border-[#FCD116] pl-5 font-semibold leading-7 text-[#006B3F]">
+              FoodBridge helps close the gap between available surplus food
+              and community need.
+            </p>
           </div>
 
 
-          {/* Hero Visual */}
+          <div className="overflow-hidden rounded-3xl">
+            <img
+              src="/images/food-surplus.jpg"
+              alt="Surplus food prepared for redistribution"
+              className="h-[380px] w-full object-cover md:h-[460px]"
+            />
+          </div>
 
-          <div className="relative mx-auto w-full max-w-lg">
+        </div>
+      </section>
 
-            <div className="rounded-[2rem] bg-[#D9A441] p-3 shadow-2xl">
 
-              <div className="flex min-h-[390px] items-center justify-center rounded-[1.5rem] bg-[#F8F1E5] p-8">
+      {/* WHAT FOODBRIDGE DOES */}
+      <section className="bg-[#F6E7C1] px-6 py-24 md:px-10">
+        <div className="mx-auto max-w-7xl">
 
-                <div className="text-center">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="font-bold uppercase tracking-wider text-[#CE1126]">
+              What FoodBridge Does
+            </p>
 
-                  <div className="text-8xl">
-                    🍲
+            <h2 className="mt-3 text-3xl font-bold text-[#006B3F] md:text-4xl">
+              One platform. Three connected actions.
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-2xl leading-8 text-[#6B5E52]">
+              FoodBridge makes it easier to move surplus food from those who
+              have it to those who need it.
+            </p>
+          </div>
+
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+
+            {/* DONATE */}
+            <div className="rounded-2xl border-t-4 border-[#CE1126] bg-[#FFF9E8] p-8 shadow-sm">
+              <span className="text-sm font-bold text-[#CE1126]">
+                01
+              </span>
+
+              <h3 className="mt-4 text-2xl font-bold text-[#006B3F]">
+                Donate
+              </h3>
+
+              <p className="mt-4 leading-7 text-[#6B5E52]">
+                Food businesses and organizations can list surplus food
+                with details about quantity, location and collection.
+              </p>
+            </div>
+
+
+            {/* DISCOVER */}
+            <div className="rounded-2xl border-t-4 border-[#FCD116] bg-[#FFF9E8] p-8 shadow-sm">
+              <span className="text-sm font-bold text-[#B08A00]">
+                02
+              </span>
+
+              <h3 className="mt-4 text-2xl font-bold text-[#006B3F]">
+                Discover
+              </h3>
+
+              <p className="mt-4 leading-7 text-[#6B5E52]">
+                Individuals and organizations can discover available food
+                opportunities within their communities.
+              </p>
+            </div>
+
+
+            {/* REDISTRIBUTE */}
+            <div className="rounded-2xl border-t-4 border-[#006B3F] bg-[#FFF9E8] p-8 shadow-sm">
+              <span className="text-sm font-bold text-[#006B3F]">
+                03
+              </span>
+
+              <h3 className="mt-4 text-2xl font-bold text-[#006B3F]">
+                Redistribute
+              </h3>
+
+              <p className="mt-4 leading-7 text-[#6B5E52]">
+                Requests can be coordinated for collection so surplus food
+                can reach people instead of becoming waste.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* HOW IT WORKS */}
+      <section className="bg-[#FFF3D0] px-6 py-24 md:px-10">
+        <div className="mx-auto max-w-7xl">
+
+          <div className="grid items-center gap-14 md:grid-cols-2">
+
+            <div className="overflow-hidden rounded-3xl">
+              <img
+                src="/images/food-distribution.jpg"
+                alt="People packing and distributing food"
+                className="h-[380px] w-full object-cover md:h-[460px]"
+              />
+            </div>
+
+
+            <div>
+              <p className="font-bold uppercase tracking-wider text-[#CE1126]">
+                How It Works
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold leading-tight text-[#006B3F] md:text-4xl">
+                From surplus food to community impact.
+              </h2>
+
+              <p className="mt-5 leading-8 text-[#6B5E52]">
+                FoodBridge provides a structured way for donors and recipients
+                to connect and coordinate food redistribution.
+              </p>
+
+
+              <div className="mt-8 space-y-6">
+
+                {/* STEP 1 */}
+                <div className="flex gap-5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#CE1126] font-bold text-white">
+                    1
                   </div>
 
-                  <h2 className="mt-6 text-3xl font-bold text-[#1F5D42]">
-                    Share food.
-                  </h2>
+                  <div>
+                    <h3 className="font-bold text-[#006B3F]">
+                      Food is listed
+                    </h3>
 
-                  <h2 className="text-3xl font-bold text-[#C65D3A]">
-                    Strengthen communities.
-                  </h2>
+                    <p className="mt-1 leading-6 text-[#6B5E52]">
+                      A donor provides information about available surplus
+                      food.
+                    </p>
+                  </div>
+                </div>
 
-                  <p className="mx-auto mt-4 max-w-sm text-gray-600">
-                    A simple connection between surplus food and people who
-                    need it.
-                  </p>
 
+                {/* STEP 2 */}
+                <div className="flex gap-5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FCD116] font-bold text-black">
+                    2
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-[#006B3F]">
+                      Food is discovered
+                    </h3>
+
+                    <p className="mt-1 leading-6 text-[#6B5E52]">
+                      Recipients can find food that is available in their
+                      area.
+                    </p>
+                  </div>
+                </div>
+
+
+                {/* STEP 3 */}
+                <div className="flex gap-5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#006B3F] font-bold text-white">
+                    3
+                  </div>
+
+                  <div>
+                    <h3 className="font-bold text-[#006B3F]">
+                      Collection is coordinated
+                    </h3>
+
+                    <p className="mt-1 leading-6 text-[#6B5E52]">
+                      Donors and recipients coordinate how and when the food
+                      will be collected.
+                    </p>
+                  </div>
                 </div>
 
               </div>
-
-            </div>
-
-
-            <div className="absolute -bottom-5 -left-5 rounded-2xl bg-white p-5 shadow-xl">
-
-              <p className="text-sm text-gray-500">
-                Our mission
-              </p>
-
-              <p className="mt-1 font-bold text-[#1F5D42]">
-                Less waste. More food.
-              </p>
-
             </div>
 
           </div>
-
         </div>
       </section>
 
 
-      {/* ========================= */}
-{/* WHY FOODBRIDGE */}
-{/* ========================= */}
+      
 
-<section className="relative overflow-hidden bg-[#F8F1E5] px-6 py-20 md:px-10">
+{/* ================= WHO FOODBRIDGE IS FOR ================= */}
+<section className="bg-[#1C1C1C] text-white py-16 md:py-20">
+  <div className="max-w-7xl mx-auto px-6">
 
-  <AfricanPattern />
+    <div className="grid md:grid-cols-2 gap-12 items-center">
 
-  <div className="relative z-10 mx-auto max-w-7xl">
+      {/* TEXT CONTENT */}
+      <div className="order-2 md:order-1">
 
-    {/* Section Heading */}
-
-    <div className="mx-auto max-w-3xl text-center">
-
-      <p className="font-bold uppercase tracking-wider text-[#C65D3A]">
-        Why FoodBridge?
-      </p>
-
-      <h2 className="mt-3 text-3xl font-bold text-[#202020] md:text-4xl">
-        Turning surplus into opportunity.
-      </h2>
-
-      <p className="mx-auto mt-5 max-w-2xl leading-8 text-gray-600">
-        Across communities, perfectly usable food can become surplus while
-        people and organizations struggle to access enough food.
-        FoodBridge is designed to help bridge that gap.
-      </p>
-
-    </div>
-
-
-    {/* ========================= */}
-    {/* IMPACT CARDS */}
-    {/* ========================= */}
-
-    <div className="mx-auto mt-14 grid max-w-6xl items-stretch gap-8 md:grid-cols-3">
-
-
-      {/* ========================= */}
-      {/* REDUCE FOOD WASTE */}
-      {/* ========================= */}
-
-      <div className="group flex h-full flex-col rounded-3xl bg-[#E4F0E9] p-8 text-center shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Icon */}
-
-        <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#1F5D42] text-5xl">
-          🍽️
-        </div>
-
-        {/* Title */}
-
-        <h3 className="mt-6 text-2xl font-bold text-[#1F5D42]">
-          Reduce Food Waste
-        </h3>
-
-        {/* Description */}
-
-        <p className="mt-4 flex-1 leading-7 text-[#202020]/70">
-          Give edible surplus food an opportunity to serve a purpose
-          before it becomes waste.
+        <p className="text-[#FCD116] font-semibold uppercase tracking-wide mb-3">
+          Who FoodBridge Is For
         </p>
 
-        {/* Bottom Message */}
+        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          Built for people, businesses and communities.
+        </h2>
 
-        <div className="mt-6 border-t border-[#1F5D42]/20 pt-5">
+        <p className="text-lg text-white/90 leading-relaxed mb-8">
+          FoodBridge brings different groups together around one shared goal:
+          making sure good food can serve a purpose instead of becoming waste.
+        </p>
 
-          <p className="text-sm font-semibold text-[#1F5D42]">
-            Save food from going to waste.
-          </p>
+        <div className="grid sm:grid-cols-2 gap-6">
+
+          {/* FOOD BUSINESSES */}
+          <div className="border-l-4 border-[#FCD116] pl-4">
+            <h3 className="font-bold text-[#FCD116]">
+              Food Businesses
+            </h3>
+
+            <p className="text-sm text-white/85 mt-1">
+              Restaurants, hotels, supermarkets, caterers, bakeries, farms
+              and other businesses.
+            </p>
+          </div>
+
+
+          {/* ORGANIZATIONS */}
+          <div className="border-l-4 border-[#CE1126] pl-4">
+            <h3 className="font-bold text-white">
+              Organizations
+            </h3>
+
+            <p className="text-sm text-white/85 mt-1">
+              Charities, NGOs, shelters and community organizations.
+            </p>
+          </div>
+
+
+          {/* INDIVIDUALS */}
+          <div className="border-l-4 border-[#006B3F] pl-4">
+            <h3 className="font-bold text-white">
+              Individuals
+            </h3>
+
+            <p className="text-sm text-white/85 mt-1">
+              People looking for available food opportunities within their
+              communities.
+            </p>
+          </div>
+
+
+          {/* VOLUNTEERS */}
+          <div className="border-l-4 border-[#FCD116] pl-4">
+            <h3 className="font-bold text-[#FCD116]">
+              Volunteers
+            </h3>
+
+            <p className="text-sm text-white/85 mt-1">
+              People who want to support food redistribution efforts.
+            </p>
+          </div>
 
         </div>
 
       </div>
 
 
-      {/* ========================= */}
-      {/* SUPPORT COMMUNITIES */}
-      {/* ========================= */}
+      {/* IMAGE */}
+      <div className="order-1 md:order-2">
 
-      <div className="group flex h-full flex-col rounded-3xl bg-[#B84A39] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Icon */}
-
-        <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#F4D98A] text-5xl">
-          🤝
-        </div>
-
-        {/* Title */}
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Support Communities
-        </h3>
-
-        {/* Description */}
-
-        <p className="mt-4 flex-1 leading-7 text-white/85">
-          Help connect available food with people and organizations
-          within communities.
-        </p>
-
-        {/* Bottom Message */}
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#F4D98A]">
-            Food is better when shared.
-          </p>
-
-        </div>
+        <img
+          src="/images/foodbridge-community.jpg"
+          alt="People participating in a community food initiative"
+          className="w-full h-[420px] object-cover rounded-lg"
+        />
 
       </div>
-
-
-      {/* ========================= */}
-      {/* SUSTAINABLE IMPACT */}
-      {/* ========================= */}
-
-      <div className="group flex h-full flex-col rounded-3xl bg-[#7B5E3B] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Icon */}
-
-        <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#D9A441] text-5xl">
-          🌍
-        </div>
-
-        {/* Title */}
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Create Sustainable Impact
-        </h3>
-
-        {/* Description */}
-
-        <p className="mt-4 flex-1 leading-7 text-white/85">
-          Track the amount of food redistributed and the communities
-          reached through the platform.
-        </p>
-
-        {/* Bottom Message */}
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#F4D98A]">
-            Measure the difference we make.
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    {/* Supporting Message */}
-
-    <div className="mx-auto mt-12 max-w-2xl text-center">
-
-      <p className="text-sm leading-6 text-gray-500">
-        FoodBridge brings technology and community together to make
-        food redistribution easier, more organized and more meaningful.
-      </p>
 
     </div>
 
   </div>
-
 </section>
 
 
 
-      {/* ========================= */}
-{/* HOW IT WORKS */}
-{/* ========================= */}
-
-<section className="relative overflow-hidden bg-white px-6 py-20 md:px-10">
-
-  <AfricanPattern />
-
-  <div className="relative z-10 mx-auto max-w-7xl">
-
-    {/* Section Heading */}
-    <div className="mx-auto max-w-3xl text-center">
-
-      <p className="font-bold uppercase tracking-wider text-[#C65D3A]">
-        How it works
-      </p>
-
-      <h2 className="mt-3 text-3xl font-bold text-[#202020] md:text-4xl">
-        Three steps. One shared purpose.
-      </h2>
-
-      <p className="mx-auto mt-5 max-w-2xl leading-8 text-gray-600">
-        FoodBridge makes food redistribution easier by connecting those
-        who have surplus food with those who need it.
-      </p>
-
-    </div>
 
 
-    {/* How It Works Cards */}
+      {/* AFRICAN VISION */}
+      <section className="bg-[#006B3F] px-6 py-24 md:px-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-14 md:grid-cols-2">
 
-    <div className="mx-auto mt-14 grid max-w-6xl gap-8 md:grid-cols-3">
+          <div className="overflow-hidden rounded-3xl">
+            <img
+              src="/images/african-community.jpg"
+              alt="African community and local food market"
+              className="h-[400px] w-full object-cover md:h-[480px]"
+            />
+          </div>
 
 
-      {/* ========================= */}
-      {/* DONATE CARD */}
-      {/* ========================= */}
+          <div className="text-white">
 
-      <div className="group rounded-3xl bg-[#1F5D42] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+            <p className="font-bold uppercase tracking-wider text-[#FCD116]">
+              Our Vision
+            </p>
 
-        {/* Number */}
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#D9A441] text-xl font-bold text-[#202020] shadow-md">
-          01
+            <h2 className="mt-3 text-4xl font-bold leading-tight md:text-5xl">
+              Born in Ghana.
+              <span className="block text-[#FCD116]">
+                Built for Africa.
+              </span>
+            </h2>
+
+            <p className="mt-6 text-lg leading-8 text-green-50">
+              FoodBridge begins with a Ghanaian foundation and a vision that
+              extends beyond borders. The platform is designed to grow with
+              communities across Africa and make food redistribution easier,
+              more organized, and more accessible.
+            </p>
+
+            <Link
+              to="/about"
+              className="mt-8 inline-block rounded-lg bg-[#FCD116] px-8 py-3 font-bold text-black transition hover:bg-[#E6BC00]"
+            >
+              Learn About Our Vision
+            </Link>
+
+          </div>
         </div>
+      </section>
 
-        {/* Icon */}
-        <div className="mx-auto mt-7 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 text-5xl">
-          🍲
-        </div>
 
-        <h3 className="mt-6 text-2xl font-bold">
-          Donate
-        </h3>
+      {/* IMPACT */}
+      <section className="bg-[#F6E7C1] px-6 py-24 md:px-10">
+        <div className="mx-auto max-w-6xl text-center">
 
-        <p className="mt-4 leading-7 text-green-50">
-          Food businesses and organizations can list their available
-          surplus food, including the quantity, location and collection
-          information.
-        </p>
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#F4D98A]">
-            Share what you have.
+          <p className="font-bold uppercase tracking-wider text-[#CE1126]">
+            Our Impact
           </p>
 
-        </div>
-
-      </div>
-
-
-      {/* ========================= */}
-      {/* CONNECT CARD */}
-      {/* ========================= */}
-
-      <div className="group rounded-3xl bg-[#D9A441] p-8 text-center text-[#202020] shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Number */}
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#1F5D42] text-xl font-bold text-white shadow-md">
-          02
-        </div>
-
-        {/* Icon */}
-        <div className="mx-auto mt-7 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/40 text-5xl">
-          🤝
-        </div>
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Connect
-        </h3>
-
-        <p className="mt-4 leading-7 text-[#202020]/75">
-          Recipients can discover available food, search by location and
-          availability, and submit requests for food that meets their
-          needs.
-        </p>
-
-        <div className="mt-6 border-t border-[#202020]/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#1F5D42]">
-            Find what you need.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      {/* ========================= */}
-      {/* REDISTRIBUTE CARD */}
-      {/* ========================= */}
-
-      <div className="group rounded-3xl bg-[#C65D3A] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Number */}
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#F8F1E5] text-xl font-bold text-[#C65D3A] shadow-md">
-          03
-        </div>
-
-        {/* Icon */}
-        <div className="mx-auto mt-7 flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 text-5xl">
-          🧺
-        </div>
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Redistribute
-        </h3>
-
-        <p className="mt-4 leading-7 text-orange-50">
-          Approved requests are coordinated for collection, helping ensure
-          surplus food reaches people and communities instead of becoming
-          waste.
-        </p>
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#F4D98A]">
-            Turn surplus into impact.
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    {/* Small supporting message */}
-
-    <div className="mx-auto mt-12 max-w-2xl text-center">
-
-      <p className="text-sm leading-6 text-gray-500">
-        From the moment surplus food is listed to the moment it reaches
-        someone who needs it, FoodBridge helps make the process more
-        visible, organized and connected.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-      {/* ========================= */}
-{/* WHO IS FOODBRIDGE FOR */}
-{/* ========================= */}
-
-<section className="relative overflow-hidden bg-[#EFE5D5] px-6 py-20 md:px-10">
-
-  <AfricanPattern />
-
-  <div className="relative z-10 mx-auto max-w-7xl">
-
-    {/* Section Heading */}
-
-    <div className="mx-auto max-w-3xl text-center">
-
-      <p className="font-bold uppercase tracking-wider text-[#C65D3A]">
-        Who is FoodBridge for?
-      </p>
-
-      <h2 className="mt-3 text-3xl font-bold text-[#202020] md:text-4xl">
-        Everyone can help bridge the gap.
-      </h2>
-
-      <p className="mx-auto mt-5 max-w-2xl leading-8 text-gray-600">
-        FoodBridge brings together food businesses, organizations and
-        individuals to create a stronger culture of food sharing.
-      </p>
-
-    </div>
-
-
-    {/* ========================= */}
-    {/* USER TYPE CARDS */}
-    {/* ========================= */}
-
-    <div className="mx-auto mt-14 grid max-w-6xl items-stretch gap-8 md:grid-cols-3">
-
-
-      {/* ========================= */}
-      {/* FOOD BUSINESSES */}
-      {/* ========================= */}
-
-      <div className="group flex h-full flex-col rounded-3xl bg-[#C98232] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Icon */}
-
-        <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#F8F1E5] text-5xl">
-          🏪
-        </div>
-
-
-        {/* Title */}
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Food Businesses
-        </h3>
-
-
-        {/* Description */}
-
-        <p className="mt-4 flex-1 leading-7 text-white/85">
-          Restaurants, hotels, supermarkets, caterers, bakeries, farms
-          and other businesses can share their surplus food.
-        </p>
-
-
-        {/* Bottom Message */}
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#FFF0C2]">
-            Share your surplus.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      {/* ========================= */}
-      {/* ORGANIZATIONS */}
-      {/* ========================= */}
-
-      <div className="group flex h-full flex-col rounded-3xl bg-[#176B5B] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Icon */}
-
-        <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#D9A441] text-5xl">
-          🤝
-        </div>
-
-
-        {/* Title */}
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Organizations
-        </h3>
-
-
-        {/* Description */}
-
-        <p className="mt-4 flex-1 leading-7 text-white/85">
-          Charities, NGOs, shelters and community organizations can
-          discover available food and coordinate collections.
-        </p>
-
-
-        {/* Bottom Message */}
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#F4D98A]">
-            Strengthen your community.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      {/* ========================= */}
-      {/* INDIVIDUALS */}
-      {/* ========================= */}
-
-      <div className="group flex h-full flex-col rounded-3xl bg-[#6B3F69] p-8 text-center text-white shadow-lg transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-
-        {/* Icon */}
-
-       <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#F4D98A] text-5xl">
-  👥
-</div>
-
-
-        {/* Title */}
-
-        <h3 className="mt-6 text-2xl font-bold">
-          Individuals
-        </h3>
-
-
-        {/* Description */}
-
-        <p className="mt-4 flex-1 leading-7 text-white/85">
-          Individuals can discover available food opportunities within
-          their communities and participate in food redistribution.
-        </p>
-
-
-        {/* Bottom Message */}
-
-        <div className="mt-6 border-t border-white/20 pt-5">
-
-          <p className="text-sm font-semibold text-[#F4D98A]">
-            Connect with your community.
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    {/* Supporting Message */}
-
-    <div className="mx-auto mt-12 max-w-2xl text-center">
-
-      <p className="text-sm leading-6 text-gray-500">
-        Whether you are donating surplus food or looking for available
-        food, there is a place for you in the FoodBridge community.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-      {/* ========================= */}
-      {/* AFRICA VISION */}
-      {/* ========================= */}
-
-      <section className="relative overflow-hidden bg-[#1F5D42] px-6 py-20 md:px-10">
-
-        <AfricanPattern />
-
-        <div className="relative z-10 mx-auto max-w-5xl text-center text-white">
-
-          <p className="font-bold uppercase tracking-wider text-[#D9A441]">
-            Our vision
-          </p>
-
-          <h2 className="mt-4 text-4xl font-bold md:text-5xl">
-            Born in Ghana. Built for Africa.
+          <h2 className="mt-3 text-3xl font-bold text-[#006B3F] md:text-4xl">
+            Every connection can make a difference.
           </h2>
 
-          <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-green-50">
-            FoodBridge begins with a Ghanaian foundation and a vision that
-            extends beyond borders. The platform is designed to grow with
-            communities across Africa and make food redistribution easier,
-            more organized, and more accessible.
+          <p className="mx-auto mt-5 max-w-2xl leading-8 text-[#6B5E52]">
+            As FoodBridge grows, the platform can help measure the food
+            redistributed and the communities reached.
           </p>
 
-          <Link
-            to="/about"
-            className="mt-8 inline-block rounded-lg bg-[#D9A441] px-8 py-3 font-bold text-[#202020] transition hover:bg-[#E5B95C]"
-          >
-            Learn About Our Vision
-          </Link>
 
+          <div className="mt-14 grid gap-8 md:grid-cols-3">
+
+            <div className="border-t-4 border-[#006B3F] pt-6">
+              <p className="text-4xl font-bold text-[#006B3F]">
+                0
+              </p>
+
+              <p className="mt-2 font-semibold text-[#6B5E52]">
+                Meals Shared
+              </p>
+            </div>
+
+
+            <div className="border-t-4 border-[#FCD116] pt-6">
+              <p className="text-4xl font-bold text-[#006B3F]">
+                0
+              </p>
+
+              <p className="mt-2 font-semibold text-[#6B5E52]">
+                Food Donations
+              </p>
+            </div>
+
+
+            <div className="border-t-4 border-[#CE1126] pt-6">
+              <p className="text-4xl font-bold text-[#006B3F]">
+                0
+              </p>
+
+              <p className="mt-2 font-semibold text-[#6B5E52]">
+                Communities Reached
+              </p>
+            </div>
+
+          </div>
         </div>
-
       </section>
 
 
-      {/* ========================= */}
       {/* FINAL CTA */}
-      {/* ========================= */}
+      <section className="bg-[#CE1126] px-6 py-24 md:px-10">
+        <div className="mx-auto max-w-4xl text-center text-white">
 
-      <section className="relative overflow-hidden bg-[#F8F1E5] px-6 py-20 md:px-10">
-
-        <AfricanPattern />
-
-        <div className="relative z-10 mx-auto max-w-4xl text-center">
-
-          <h2 className="text-4xl font-bold text-[#1F5D42] md:text-5xl">
+          <h2 className="text-4xl font-bold md:text-5xl">
             Have surplus food?
           </h2>
 
-          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-gray-600">
-            Your surplus could become someone's opportunity. Join FoodBridge
-            and help build a stronger culture of food sharing.
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/90">
+            Don't let good food go to waste. Help connect it with someone
+            who needs it.
           </p>
 
           <Link
             to="/signup"
-            className="mt-8 inline-block rounded-lg bg-[#C65D3A] px-8 py-3 font-bold text-white transition hover:bg-[#A94B2E]"
+            className="mt-8 inline-block rounded-lg bg-[#FCD116] px-8 py-3.5 font-bold text-black transition hover:bg-[#E6BC00]"
           >
             Join FoodBridge
           </Link>
 
         </div>
-
       </section>
+
+
+      {/* GHANA COLOUR STRIPE */}
+      <div className="flex h-2 w-full">
+        <div className="w-1/3 bg-[#CE1126]"></div>
+        <div className="w-1/3 bg-[#FCD116]"></div>
+        <div className="w-1/3 bg-[#006B3F]"></div>
+      </div>
 
     </main>
   );
 }
 
 export default Home;
+
