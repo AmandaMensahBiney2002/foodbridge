@@ -1,5 +1,123 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    setErrorMessage("");
+    setSuccessMessage("");
+    setIsLoggingIn(true);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(
+          data.error || "Unable to log in. Please try again."
+        );
+
+        setIsLoggingIn(false);
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      console.log("Login successful");
+
+      navigate("/dashboard");
+
+    } catch (error) {
+      console.error("Login error:", error);
+
+      setErrorMessage(
+        "Something went wrong. Please check your connection and try again."
+      );
+
+      setIsLoggingIn(false);
+    }
+  };
+
+
+  const handleResendVerification = async () => {
+    setErrorMessage("");
+    setSuccessMessage("");
+    setIsResending(true);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/resend-verification",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMessage(
+          data.error ||
+          "Unable to resend the verification email."
+        );
+
+        setIsResending(false);
+        return;
+      }
+
+      setSuccessMessage(
+        data.message ||
+        "A new verification email has been sent."
+      );
+
+    } catch (error) {
+      console.error(
+        "Resend verification error:",
+        error
+      );
+
+      setErrorMessage(
+        "Something went wrong while resending the verification email. Please try again."
+      );
+    }
+
+    setIsResending(false);
+  };
+
+
   return (
     <div className="min-h-screen bg-[#FFFDF5] text-[#3F352C]">
 
@@ -31,8 +149,8 @@ function Login() {
               <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-md">
                 <img
                   src="/images/logo.png"
-                  
                   className="h-11 w-11 object-contain"
+                  alt="FoodBridge logo"
                 />
               </div>
 
@@ -92,8 +210,56 @@ function Login() {
 
             </div>
 
+            {/* ERROR MESSAGE */}
+            {errorMessage && (
+              <div className="mb-6 rounded-xl border border-[#C65D3A]/30 bg-[#C65D3A]/10 px-4 py-4 text-sm text-[#C65D3A]">
+                <p className="font-semibold">
+                  Login unsuccessful
+                </p>
+
+                <p className="mt-1">
+                  {errorMessage}
+                </p>
+
+                {/* RESEND VERIFICATION */}
+                {errorMessage ===
+                  "Please verify your email address before logging in." && (
+                  <button
+                    type="button"
+                    onClick={handleResendVerification}
+                    disabled={isResending || !email.trim()}
+                    className="mt-4 rounded-lg border border-[#006B3F] bg-white px-4 py-2.5 text-sm font-semibold text-[#006B3F] transition hover:bg-[#006B3F] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isResending
+                      ? "Sending..."
+                      : "Resend verification email"}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* SUCCESS MESSAGE */}
+            {successMessage && (
+              <div className="mb-6 rounded-xl border border-[#006B3F]/20 bg-[#006B3F]/10 px-4 py-4 text-sm text-[#006B3F]">
+                <p className="font-semibold">
+                  Verification email
+                </p>
+
+                <p className="mt-1">
+                  {successMessage}
+                </p>
+
+                <p className="mt-2 text-xs text-[#3F352C]/70">
+                  Please check your inbox and spam or junk folder.
+                </p>
+              </div>
+            )}
+
             {/* FORM */}
-            <form className="space-y-5">
+            <form
+              className="space-y-5"
+              onSubmit={handleLogin}
+            >
 
               {/* EMAIL */}
               <div>
@@ -110,6 +276,12 @@ function Login() {
                   name="email"
                   placeholder="you@example.com"
                   required
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setErrorMessage("");
+                    setSuccessMessage("");
+                  }}
                   className="w-full rounded-xl border border-[#3F352C]/15 bg-[#FFFDF5] px-4 py-3.5 text-[#3F352C] outline-none transition placeholder:text-[#3F352C]/35 focus:border-[#006B3F] focus:ring-4 focus:ring-[#006B3F]/10"
                 />
               </div>
@@ -125,12 +297,13 @@ function Login() {
                     Password
                   </label>
 
-                  <a
-                    href="#"
+                  <button
+                    type="button"
+                    onClick={() => navigate("/forgot-password")}
                     className="text-sm font-semibold text-[#006B3F] transition hover:text-[#CE1126]"
                   >
                     Forgot password?
-                  </a>
+                  </button>
 
                 </div>
 
@@ -140,6 +313,12 @@ function Login() {
                   name="password"
                   placeholder="Enter your password"
                   required
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setErrorMessage("");
+                    setSuccessMessage("");
+                  }}
                   className="w-full rounded-xl border border-[#3F352C]/15 bg-[#FFFDF5] px-4 py-3.5 text-[#3F352C] outline-none transition placeholder:text-[#3F352C]/35 focus:border-[#006B3F] focus:ring-4 focus:ring-[#006B3F]/10"
                 />
               </div>
@@ -166,9 +345,10 @@ function Login() {
               {/* BUTTON */}
               <button
                 type="submit"
-                className="w-full rounded-xl bg-[#006B3F] px-6 py-3.5 font-bold text-white shadow-md transition duration-200 hover:-translate-y-0.5 hover:bg-[#005531] hover:shadow-lg"
+                disabled={isLoggingIn}
+                className="w-full rounded-xl bg-[#006B3F] px-6 py-3.5 font-bold text-white shadow-md transition duration-200 hover:-translate-y-0.5 hover:bg-[#005531] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Log In
+                {isLoggingIn ? "Logging In..." : "Log In"}
               </button>
 
             </form>
@@ -211,4 +391,3 @@ function Login() {
 }
 
 export default Login;
-
