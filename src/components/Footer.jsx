@@ -16,8 +16,12 @@ function Footer() {
 
           <Link to="/" className="flex items-center gap-3">
 
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#D9A441] text-xl">
-              🌍
+            <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-white">
+              <img
+                src="/images/logo.jpg"
+                alt="FoodBridge logo"
+                className="h-12 w-12 rounded-full object-cover"
+              />
             </div>
 
             <div>

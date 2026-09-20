@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 const VerifyEmail = () => {
@@ -7,7 +8,15 @@ const VerifyEmail = () => {
   const [status, setStatus] = useState("verifying");
   const [message, setMessage] = useState("");
 
+  const verificationStarted = useRef(false);
+
   useEffect(() => {
+    if (verificationStarted.current) {
+      return;
+    }
+
+    verificationStarted.current = true;
+
     const verifyEmail = async () => {
       const token = searchParams.get("token");
 

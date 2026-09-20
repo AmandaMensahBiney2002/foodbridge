@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function FoodListings() {
   const navigate = useNavigate();
@@ -247,10 +247,20 @@ function FoodListings() {
                         Donor
                       </p>
 
-                      <p className="mt-1">
-                        {listing.donor_first_name}{" "}
-                        {listing.donor_last_name}
-                      </p>
+                      {listing.donor_id ? (
+                        <Link
+                          to={`/profile/${listing.donor_id}`}
+                          className="mt-1 inline-block font-semibold text-[#006B3F] hover:underline"
+                        >
+                          {listing.donor_first_name}{" "}
+                          {listing.donor_last_name}
+                        </Link>
+                      ) : (
+                        <p className="mt-1">
+                          {listing.donor_first_name}{" "}
+                          {listing.donor_last_name}
+                        </p>
+                      )}
                     </div>
                   )}
 

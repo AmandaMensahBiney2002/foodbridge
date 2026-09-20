@@ -1,9 +1,23 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinkClass = ({ isActive }) =>
+    `relative font-medium text-white transition ${
+      isActive
+        ? "text-[#FCD116]"
+        : "hover:text-[#FCD116]"
+    }`;
+
+  const mobileNavLinkClass = ({ isActive }) =>
+    `rounded-lg px-4 py-3 font-medium text-white transition ${
+      isActive
+        ? "bg-white/10 text-[#FCD116]"
+        : "hover:bg-white/10 hover:text-[#FCD116]"
+    }`;
 
   return (
     <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#006B3F] shadow-sm">
@@ -20,16 +34,14 @@ function Navbar() {
           className="flex items-center gap-3"
         >
 
-          {/* LOGO SPACE */}
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white">
+          <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white">
             <img
-              src="/images/logo.png"
-             
-              className="h-9 w-9 object-contain"
+              src="/images/logo.jpg"
+              alt="FoodBridge logo"
+              className="h-11 w-11 rounded-full object-cover"
             />
           </div>
 
-          {/* BRAND NAME */}
           <div>
             <span className="block text-xl font-bold leading-none text-white">
               FoodBridge
@@ -49,40 +61,75 @@ function Navbar() {
 
         <div className="hidden items-center gap-8 md:flex">
 
-          <Link
+          <NavLink
             to="/"
-            className="font-medium text-white transition hover:text-[#FCD116]"
+            end
+            className={navLinkClass}
           >
-            Home
-          </Link>
+            {({ isActive }) => (
+              <>
+                Home
+                {isActive && (
+                  <span className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-[#FCD116]" />
+                )}
+              </>
+            )}
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/about"
-            className="font-medium text-white transition hover:text-[#FCD116]"
+            className={navLinkClass}
           >
-            About
-          </Link>
+            {({ isActive }) => (
+              <>
+                About
+                {isActive && (
+                  <span className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-[#FCD116]" />
+                )}
+              </>
+            )}
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/contact"
-            className="font-medium text-white transition hover:text-[#FCD116]"
+            className={navLinkClass}
           >
-            Contact
-          </Link>
+            {({ isActive }) => (
+              <>
+                Contact
+                {isActive && (
+                  <span className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-[#FCD116]" />
+                )}
+              </>
+            )}
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/login"
-            className="font-medium text-white transition hover:text-[#FCD116]"
+            className={navLinkClass}
           >
-            Login
-          </Link>
+            {({ isActive }) => (
+              <>
+                Login
+                {isActive && (
+                  <span className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-[#FCD116]" />
+                )}
+              </>
+            )}
+          </NavLink>
 
-          <Link
+          <NavLink
             to="/signup"
-            className="rounded-lg bg-[#FCD116] px-5 py-2.5 font-bold text-[#3F352C] shadow-sm transition hover:bg-[#e5bc0f] hover:shadow-md"
+            className={({ isActive }) =>
+              `rounded-lg px-5 py-2.5 font-bold text-[#3F352C] shadow-sm transition ${
+                isActive
+                  ? "bg-[#e5bc0f] ring-2 ring-[#FCD116] ring-offset-2 ring-offset-[#006B3F]"
+                  : "bg-[#FCD116] hover:bg-[#e5bc0f] hover:shadow-md"
+              }`
+            }
           >
             Sign Up
-          </Link>
+          </NavLink>
 
         </div>
 
@@ -113,45 +160,52 @@ function Navbar() {
 
           <div className="flex flex-col gap-2">
 
-            <Link
+            <NavLink
               to="/"
+              end
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-[#FCD116]"
+              className={mobileNavLinkClass}
             >
               Home
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/about"
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-[#FCD116]"
+              className={mobileNavLinkClass}
             >
               About
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/contact"
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-[#FCD116]"
+              className={mobileNavLinkClass}
             >
               Contact
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/login"
               onClick={() => setMenuOpen(false)}
-              className="rounded-lg px-4 py-3 font-medium text-white transition hover:bg-white/10 hover:text-[#FCD116]"
+              className={mobileNavLinkClass}
             >
               Login
-            </Link>
+            </NavLink>
 
-            <Link
+            <NavLink
               to="/signup"
               onClick={() => setMenuOpen(false)}
-              className="mt-2 rounded-lg bg-[#FCD116] px-4 py-3 text-center font-bold text-[#3F352C] transition hover:bg-[#e5bc0f]"
+              className={({ isActive }) =>
+                `mt-2 rounded-lg px-4 py-3 text-center font-bold text-[#3F352C] transition ${
+                  isActive
+                    ? "bg-[#e5bc0f] ring-2 ring-[#FCD116]"
+                    : "bg-[#FCD116] hover:bg-[#e5bc0f]"
+                }`
+              }
             >
               Sign Up
-            </Link>
+            </NavLink>
 
           </div>
 
@@ -164,4 +218,3 @@ function Navbar() {
 }
 
 export default Navbar;
-

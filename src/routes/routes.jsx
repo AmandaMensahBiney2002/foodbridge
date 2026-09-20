@@ -1,4 +1,3 @@
-
 import Dashboard from "../pages/Dashboard";
 import FoodListings from "../pages/FoodListings";
 import EditFoodListing from "../pages/EditFoodListing";
@@ -6,11 +5,10 @@ import FoodRequests from "../pages/FoodRequests";
 import RequestFood from "../pages/RequestFood";
 import CreateFoodListing from "../pages/CreateFoodListing";
 import Profile from "../pages/Profile";
+import PublicProfile from "../pages/PublicProfile";
 import VerifyEmail from "../pages/VerifyEmail";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
-
-
 
 import Home from "../pages/Home";
 import About from "../pages/About";
@@ -39,23 +37,26 @@ const routes = [
     element: <Login />,
     auth: false,
   },
-  { path: "/forgot-password",
-     element: <ForgotPassword />, 
-     auth: false 
-    },
-    { path: "/reset-password",
-       element: <ResetPassword />, 
-       auth: false
-       },
+  {
+    path: "/forgot-password",
+    element: <ForgotPassword />,
+    auth: false,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
+    auth: false,
+  },
   {
     path: "/signup",
     element: <SignUp />,
     auth: false,
   },
-  { path: "/verify-email",
-     element: <VerifyEmail />,
-      auth: false
-     },
+  {
+    path: "/verify-email",
+    element: <VerifyEmail />,
+    auth: false,
+  },
   {
     path: "/dashboard",
     element: <Dashboard />,
@@ -65,6 +66,11 @@ const routes = [
     path: "/profile",
     element: <Profile />,
     auth: true,
+  },
+  {
+    path: "/profile/:id",
+    element: <PublicProfile />,
+    auth: false,
   },
   {
     path: "/food-listings",
