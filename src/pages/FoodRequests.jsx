@@ -23,8 +23,8 @@ function FoodRequests() {
       const token = localStorage.getItem("token");
 
       const endpoint = isDonor
-        ? `http://localhost:5000/api/food-requests/donor/${user.id}`
-        : `http://localhost:5000/api/food-requests/recipient/${user.id}`;
+        ? `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/donor/${user.id}`
+        : `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/recipient/${user.id}`;
 
       const response = await fetch(endpoint, {
         headers: {
@@ -63,7 +63,7 @@ function FoodRequests() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/food-requests/${requestId}`,
+        `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/${requestId}`,
         {
           method: "PATCH",
           headers: {
@@ -163,7 +163,7 @@ function FoodRequests() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/food-requests/${requestId}/pickup`,
+        `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/${requestId}/pickup`,
         {
           method: "PATCH",
           headers: {

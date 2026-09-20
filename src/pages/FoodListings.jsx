@@ -18,8 +18,8 @@ function FoodListings() {
   const fetchListings = async () => {
     try {
       const endpoint = isDonor
-        ? `http://localhost:5000/api/food-listings/donor/${user.id}`
-        : "http://localhost:5000/api/food-listings";
+        ? `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/donor/${user.id}`
+        : "https://foodbridge-backend-l3b0.onrender.com/api/food-listings";
 
       const response = await fetch(endpoint, {
         headers: isDonor
@@ -65,7 +65,7 @@ function FoodListings() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/food-listings/${listingId}/close`,
+        `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/${listingId}/close`,
         {
           method: "PATCH",
           headers: {
@@ -106,7 +106,7 @@ function FoodListings() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/food-listings/${listingId}`,
+        `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/${listingId}`,
         {
           method: "DELETE",
           headers: {

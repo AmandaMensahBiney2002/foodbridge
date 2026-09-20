@@ -16,7 +16,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/forgot-password",
+        "https://foodbridge-backend-l3b0.onrender.com/api/auth/forgot-password",
         {
           method: "POST",
           headers: {

@@ -19,7 +19,7 @@ function RequestFood() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/food-requests",
+        "https://foodbridge-backend-l3b0.onrender.com/api/food-requests",
         {
           method: "POST",
           headers: {

@@ -15,7 +15,7 @@ function PublicProfile() {
         setError("");
 
         const response = await fetch(
-          `http://127.0.0.1:5000/api/profiles/${id}`
+          `https://foodbridge-backend-l3b0.onrender.com/api/profiles/${id}`
         );
 
         const data = await response.json();

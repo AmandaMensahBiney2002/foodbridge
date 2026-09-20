@@ -119,7 +119,7 @@ function Profile() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/profile",
+        "https://foodbridge-backend-l3b0.onrender.com/api/profile",
         {
           method: "PATCH",
           headers: {

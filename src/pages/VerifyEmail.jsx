@@ -28,7 +28,7 @@ const VerifyEmail = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/auth/verify-email?token=${encodeURIComponent(
+          `https://foodbridge-backend-l3b0.onrender.com/api/auth/verify-email?token=${encodeURIComponent(
             token
           )}`
         );

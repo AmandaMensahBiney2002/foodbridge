@@ -44,7 +44,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/reset-password",
+        "https://foodbridge-backend-l3b0.onrender.com/api/auth/reset-password",
         {
           method: "POST",
           headers: {

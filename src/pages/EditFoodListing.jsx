@@ -24,7 +24,7 @@ function EditFoodListing() {
     const fetchListing = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/food-listings/donor/${user.id}`,
+          `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/donor/${user.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ function EditFoodListing() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/food-listings/${id}`,
+        `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/${id}`,
         {
           method: "PATCH",
           headers: {

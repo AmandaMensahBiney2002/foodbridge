@@ -31,7 +31,7 @@ function Contact() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/contact",
+        "https://foodbridge-backend-l3b0.onrender.com/api/contact",
         {
           method: "POST",
           headers: {

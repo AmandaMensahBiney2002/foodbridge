@@ -23,7 +23,7 @@ function Dashboard() {
           const [listingsResponse, requestsResponse] =
             await Promise.all([
               fetch(
-                `http://localhost:5000/api/food-listings/donor/${user.id}`,
+                `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/donor/${user.id}`,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ function Dashboard() {
               ),
 
               fetch(
-                `http://localhost:5000/api/food-requests/donor/${user.id}`,
+                `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/donor/${user.id}`,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ function Dashboard() {
           }
         } else {
           const response = await fetch(
-            `http://localhost:5000/api/food-requests/recipient/${user.id}`,
+            `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/recipient/${user.id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

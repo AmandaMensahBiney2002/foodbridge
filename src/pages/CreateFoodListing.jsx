@@ -24,7 +24,7 @@ function CreateFoodListing() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/food-listings",
+        "https://foodbridge-backend-l3b0.onrender.com/api/food-listings",
         {
           method: "POST",
           headers: {
