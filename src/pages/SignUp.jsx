@@ -70,7 +70,7 @@ function SignUp() {
       setIsSubmitting(true);
 
       const response = await fetch(
-        "https://foodbridge-backend-l3b0.onrender.com/api/auth/signup",
+        "https://foodbridge-backend-l3b3.onrender.com/api/auth/signup",
         {
           method: "POST",
           headers: {
