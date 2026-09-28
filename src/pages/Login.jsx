@@ -6,10 +6,63 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isResending, setIsResending] = useState(false);
+
+  // =========================================================
+  // EYE ICON
+  // =========================================================
+
+  const EyeIcon = ({ visible }) => {
+    if (visible) {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="h-5 w-5"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c1.635 0 3.18-.374 4.554-1.04M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.774 3.162 10.066 7.5a10.523 10.523 0 01-4.132 5.411M6.228 6.228L3 3m3.228 3.228l3.75 3.75m7.794 7.794L21 21m-3.228-3.228l-3.75-3.75m0 0a3 3 0 10-4.243-4.243m4.243 4.243L9.78 9.78"
+          />
+        </svg>
+      );
+    }
+
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="h-5 w-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M2.062 12.348a1.978 1.978 0 010-.696C3.356 7.4 7.273 4.5 12 4.5s8.644 2.9 9.938 7.152c.04.13.04.268 0 .396C20.644 16.3 16.727 19.5 12 19.5s-8.644-3.2-9.938-7.152z"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+    );
+  };
+
+  // =========================================================
+  // LOGIN
+  // =========================================================
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -60,6 +113,10 @@ function Login() {
       setIsLoggingIn(false);
     }
   };
+
+  // =========================================================
+  // RESEND VERIFICATION
+  // =========================================================
 
   const handleResendVerification = async () => {
     setErrorMessage("");
@@ -114,7 +171,6 @@ function Login() {
 
       <div className="h-1.5 w-full bg-[linear-gradient(to_right,#CE1126_33.33%,#FCD116_33.33%,#FCD116_66.66%,#006B3F_66.66%)]"></div>
 
-
       {/* ===================================================== */}
       {/* LOGIN PAGE */}
       {/* ===================================================== */}
@@ -127,13 +183,11 @@ function Login() {
 
         <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-[#D9A441]/8 blur-3xl"></div>
 
-
         {/* ===================================================== */}
         {/* LOGIN CARD */}
         {/* ===================================================== */}
 
         <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-[28px] border border-[#2F2A25]/8 bg-white shadow-[0_25px_70px_rgba(47,42,37,0.12)] md:grid-cols-[0.9fr_1.1fr]">
-
 
           {/* ===================================================== */}
           {/* LEFT BRAND PANEL */}
@@ -147,7 +201,6 @@ function Login() {
 
             <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full border-[50px] border-white/5"></div>
 
-
             <div className="relative">
 
               {/* Logo */}
@@ -160,7 +213,6 @@ function Login() {
                 />
               </div>
 
-
               {/* Small heading */}
 
               <div className="mb-4 flex items-center gap-3">
@@ -171,7 +223,6 @@ function Login() {
                 </p>
               </div>
 
-
               {/* Main message */}
 
               <h2 className="max-w-md text-4xl font-bold leading-[1.08] lg:text-5xl">
@@ -181,14 +232,12 @@ function Login() {
                 </span>
               </h2>
 
-
               <p className="mt-6 max-w-md text-base leading-7 text-white/75">
                 A platform connecting surplus food with people and
                 organizations that need it.
               </p>
 
             </div>
-
 
             {/* Bottom statement */}
 
@@ -206,13 +255,11 @@ function Login() {
 
           </div>
 
-
           {/* ===================================================== */}
           {/* RIGHT FORM AREA */}
           {/* ===================================================== */}
 
           <div className="px-7 py-9 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
-
 
             {/* ===================================================== */}
             {/* MOBILE BRAND */}
@@ -238,7 +285,6 @@ function Login() {
 
             </div>
 
-
             {/* ===================================================== */}
             {/* HEADING */}
             {/* ===================================================== */}
@@ -259,7 +305,6 @@ function Login() {
               </p>
 
             </div>
-
 
             {/* ===================================================== */}
             {/* ERROR MESSAGE */}
@@ -284,7 +329,6 @@ function Login() {
                       {errorMessage}
                     </p>
 
-
                     {/* RESEND VERIFICATION */}
 
                     {errorMessage ===
@@ -307,7 +351,6 @@ function Login() {
 
               </div>
             )}
-
 
             {/* ===================================================== */}
             {/* SUCCESS MESSAGE */}
@@ -342,7 +385,6 @@ function Login() {
 
               </div>
             )}
-
 
             {/* ===================================================== */}
             {/* FORM */}
@@ -381,7 +423,6 @@ function Login() {
 
               </div>
 
-
               {/* PASSWORD */}
 
               <div>
@@ -405,23 +446,41 @@ function Login() {
 
                 </div>
 
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  required
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrorMessage("");
-                    setSuccessMessage("");
-                  }}
-                  className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                />
+                {/* Password input + show/hide button */}
+
+                <div className="relative">
+
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setErrorMessage("");
+                      setSuccessMessage("");
+                    }}
+                    className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 pr-12 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#77716B] transition hover:text-[#006B3F]"
+                  >
+                    <EyeIcon visible={showPassword} />
+                  </button>
+
+                </div>
 
               </div>
-
 
               {/* REMEMBER ME */}
 
@@ -443,7 +502,6 @@ function Login() {
 
               </label>
 
-
               {/* LOGIN BUTTON */}
 
               <button
@@ -459,7 +517,6 @@ function Login() {
               </button>
 
             </form>
-
 
             {/* ===================================================== */}
             {/* DIVIDER */}
@@ -477,7 +534,6 @@ function Login() {
 
             </div>
 
-
             {/* ===================================================== */}
             {/* SIGN UP */}
             {/* ===================================================== */}
@@ -489,7 +545,6 @@ function Login() {
             >
               Create an Account
             </button>
-
 
             {/* ===================================================== */}
             {/* FOOTER TEXT */}

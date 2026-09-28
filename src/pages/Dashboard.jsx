@@ -5,13 +5,26 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
   const isDonor = user?.account_type === "donor";
 
   const [requests, setRequests] = useState([]);
   const [listings, setListings] = useState([]);
 
+  // =========================================================
+  // NOTIFICATIONS
+  // =========================================================
+
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  // =========================================================
+  // FETCH DASHBOARD DATA
+  // =========================================================
+
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       return;
     }
 
@@ -23,7 +36,7 @@ function Dashboard() {
           const [listingsResponse, requestsResponse] =
             await Promise.all([
               fetch(
-                `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/donor/${user.id}`,
+                `https://foodbridge-backend-l3b0.onrender.com/api/food-listings/donor/${userId}`,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -32,7 +45,7 @@ function Dashboard() {
               ),
 
               fetch(
-                `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/donor/${user.id}`,
+                `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/donor/${userId}`,
                 {
                   headers: {
                     Authorization: `Bearer ${token}`,
@@ -53,7 +66,7 @@ function Dashboard() {
           }
         } else {
           const response = await fetch(
-            `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/recipient/${user.id}`,
+            `https://foodbridge-backend-l3b0.onrender.com/api/food-requests/recipient/${userId}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -73,7 +86,217 @@ function Dashboard() {
     };
 
     fetchDashboardData();
-  }, [isDonor, user]);
+  }, [isDonor, userId]);
+
+  // =========================================================
+  // FETCH NOTIFICATIONS
+  // =========================================================
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
+    const fetchNotifications = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const [notificationsResponse, unreadResponse] =
+          await Promise.all([
+            fetch(
+              "http://localhost:5000/api/notifications",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
+
+            fetch(
+              "http://localhost:5000/api/notifications/unread-count",
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            ),
+          ]);
+
+        const notificationsData =
+          await notificationsResponse.json();
+
+        const unreadData = await unreadResponse.json();
+
+        if (notificationsResponse.ok) {
+          setNotifications(notificationsData);
+        }
+
+        if (unreadResponse.ok) {
+          setUnreadCount(unreadData.unreadCount || 0);
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching notifications:",
+          error
+        );
+      }
+    };
+
+    fetchNotifications();
+  }, [userId]);
+
+  // =========================================================
+  // MARK ONE NOTIFICATION AS READ
+  // =========================================================
+
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `http://localhost:5000/api/notifications/${notificationId}/read`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      setNotifications((currentNotifications) =>
+        currentNotifications.map((notification) =>
+          notification.id === notificationId
+            ? {
+                ...notification,
+                is_read: true,
+              }
+            : notification
+        )
+      );
+
+      setUnreadCount((currentCount) =>
+        Math.max(currentCount - 1, 0)
+      );
+    } catch (error) {
+      console.error(
+        "Error marking notification as read:",
+        error
+      );
+    }
+  };
+
+  // =========================================================
+  // MARK ALL NOTIFICATIONS AS READ
+  // =========================================================
+
+  const markAllNotificationsAsRead = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        "http://localhost:5000/api/notifications/read-all",
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      setNotifications((currentNotifications) =>
+        currentNotifications.map((notification) => ({
+          ...notification,
+          is_read: true,
+        }))
+      );
+
+      setUnreadCount(0);
+    } catch (error) {
+      console.error(
+        "Error marking all notifications as read:",
+        error
+      );
+    }
+  };
+
+  // =========================================================
+  // OPEN NOTIFICATION
+  // =========================================================
+
+  const handleNotificationClick = async (notification) => {
+    if (!notification.is_read) {
+      await markNotificationAsRead(notification.id);
+    }
+
+    setShowNotifications(false);
+
+    if (notification.related_request_id) {
+      navigate("/food-requests");
+    }
+  };
+
+  // =========================================================
+  // FORMAT NOTIFICATION TIME
+  // =========================================================
+
+  const formatNotificationTime = (createdAt) => {
+    if (!createdAt) {
+      return "";
+    }
+
+    const date = new Date(createdAt);
+
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+
+    const now = new Date();
+    const differenceInSeconds = Math.floor(
+      (now - date) / 1000
+    );
+
+    if (differenceInSeconds < 60) {
+      return "Just now";
+    }
+
+    const differenceInMinutes = Math.floor(
+      differenceInSeconds / 60
+    );
+
+    if (differenceInMinutes < 60) {
+      return `${differenceInMinutes}m ago`;
+    }
+
+    const differenceInHours = Math.floor(
+      differenceInMinutes / 60
+    );
+
+    if (differenceInHours < 24) {
+      return `${differenceInHours}h ago`;
+    }
+
+    const differenceInDays = Math.floor(
+      differenceInHours / 24
+    );
+
+    if (differenceInDays < 7) {
+      return `${differenceInDays}d ago`;
+    }
+
+    return date.toLocaleDateString();
+  };
+
+  // =========================================================
+  // REDIRECT IF NOT LOGGED IN
+  // =========================================================
 
   if (!user) {
     navigate("/login");
@@ -168,7 +391,8 @@ function Dashboard() {
 
     const timeString = String(time).slice(0, 5);
 
-    const [hoursString, minutesString] = timeString.split(":");
+    const [hoursString, minutesString] =
+      timeString.split(":");
 
     const hours = Number(hoursString);
     const minutes = Number(minutesString);
@@ -192,16 +416,12 @@ function Dashboard() {
   // =========================================================
   // PICKUP DATE FORMAT
   // =========================================================
-  // We do NOT use new Date() here.
-  // PostgreSQL returns the date as YYYY-MM-DD.
-  // We simply rearrange the parts.
 
   const formatPickupDate = (date) => {
     if (!date) return "";
 
     const dateString = String(date).trim();
 
-    // Handle YYYY-MM-DD
     const match = dateString.match(
       /^(\d{4})-(\d{2})-(\d{2})/
     );
@@ -212,8 +432,6 @@ function Dashboard() {
       return `${day}/${month}/${year}`;
     }
 
-    // If the backend sends something unexpected,
-    // show the original value instead of "Invalid Date".
     return dateString;
   };
 
@@ -232,7 +450,7 @@ function Dashboard() {
 
       <section className="border-b border-[#2F2A25]/10 bg-white">
 
-        <div className="mx-auto max-w-7xl px-6 py-10 md:px-10">
+        <div className="mx-auto max-w-7xl px-6 py-8 md:px-10">
 
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
 
@@ -262,14 +480,205 @@ function Dashboard() {
 
             </div>
 
-            <button
-              onClick={() => navigate("/food-listings")}
-              className="w-full rounded-xl bg-[#006B3F] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#005531] md:w-auto"
-            >
-              {isDonor
-                ? "+ Add Food Listing"
-                : "Browse Available Food"}
-            </button>
+            <div className="flex w-full items-center gap-3 md:w-auto">
+
+              {/* ================================================= */}
+              {/* NOTIFICATION BELL */}
+              {/* ================================================= */}
+
+              <div className="relative">
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowNotifications(
+                      (current) => !current
+                    )
+                  }
+                  aria-label="Notifications"
+                  className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-[#2F2A25]/10 bg-white text-[#2F2A25] shadow-sm transition hover:border-[#006B3F]/30 hover:bg-[#F8F6F1]"
+                >
+
+                  {/* Bell */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.8"
+                    stroke="currentColor"
+                    className="h-6 w-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M14.857 17.082a23.848 23.848 0 0 1-5.714 0m8.142-2.25a8.967 8.967 0 0 1-1.17-4.414V9a3.75 3.75 0 1 0-7.5 0v1.418c0 1.6-.41 3.172-1.17 4.414A1.5 1.5 0 0 0 8.75 17.25h6.5a1.5 1.5 0 0 0 1.049-2.418Z"
+                    />
+                  </svg>
+
+                  {unreadCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[#C65D3A] px-1.5 text-[10px] font-bold text-white">
+                      {unreadCount > 99
+                        ? "99+"
+                        : unreadCount}
+                    </span>
+                  )}
+
+                </button>
+
+                {/* ================================================= */}
+                {/* NOTIFICATION DROPDOWN */}
+                {/* ================================================= */}
+
+                {showNotifications && (
+                  <div className="absolute right-0 top-14 z-50 w-[min(92vw,390px)] overflow-hidden rounded-2xl border border-[#2F2A25]/10 bg-white shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
+
+                    <div className="flex items-center justify-between border-b border-[#2F2A25]/8 px-5 py-4">
+
+                      <div>
+                        <h3 className="font-bold">
+                          Notifications
+                        </h3>
+
+                        <p className="mt-0.5 text-xs text-[#2F2A25]/50">
+                          {unreadCount > 0
+                            ? `${unreadCount} unread`
+                            : "You're all caught up"}
+                        </p>
+                      </div>
+
+                      {unreadCount > 0 && (
+                        <button
+                          type="button"
+                          onClick={
+                            markAllNotificationsAsRead
+                          }
+                          className="text-xs font-bold text-[#006B3F] hover:underline"
+                        >
+                          Mark all read
+                        </button>
+                      )}
+
+                    </div>
+
+                    <div className="max-h-[420px] overflow-y-auto">
+
+                      {notifications.length === 0 ? (
+
+                        <div className="px-6 py-10 text-center">
+
+                          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#006B3F]/10 text-[#006B3F]">
+
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth="1.7"
+                              stroke="currentColor"
+                              className="h-6 w-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 1-5.714 0m8.142-2.25a8.967 8.967 0 0 1-1.17-4.414V9a3.75 3.75 0 1 0-7.5 0v1.418c0 1.6-.41 3.172-1.17 4.414A1.5 1.5 0 0 0 8.75 17.25h6.5a1.5 1.5 0 0 0 1.049-2.418Z"
+                              />
+                            </svg>
+
+                          </div>
+
+                          <p className="mt-4 text-sm font-semibold">
+                            No notifications yet
+                          </p>
+
+                          <p className="mt-1 text-xs leading-5 text-[#2F2A25]/50">
+                            Important updates about your
+                            FoodBridge activity will appear
+                            here.
+                          </p>
+
+                        </div>
+
+                      ) : (
+
+                        notifications.map(
+                          (notification) => (
+                            <button
+                              key={notification.id}
+                              type="button"
+                              onClick={() =>
+                                handleNotificationClick(
+                                  notification
+                                )
+                              }
+                              className={`w-full border-b border-[#2F2A25]/6 px-5 py-4 text-left transition hover:bg-[#F8F6F1] ${
+                                notification.is_read
+                                  ? "bg-white"
+                                  : "bg-[#F3F8F5]"
+                              }`}
+                            >
+
+                              <div className="flex gap-3">
+
+                                <div
+                                  className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${
+                                    notification.is_read
+                                      ? "bg-[#2F2A25]/10"
+                                      : "bg-[#006B3F]"
+                                  }`}
+                                ></div>
+
+                                <div className="min-w-0 flex-1">
+
+                                  <div className="flex items-start justify-between gap-3">
+
+                                    <p
+                                      className={`text-sm ${
+                                        notification.is_read
+                                          ? "font-medium"
+                                          : "font-bold"
+                                      }`}
+                                    >
+                                      {notification.title}
+                                    </p>
+
+                                    <span className="shrink-0 text-[10px] text-[#2F2A25]/40">
+                                      {formatNotificationTime(
+                                        notification.created_at
+                                      )}
+                                    </span>
+
+                                  </div>
+
+                                  <p className="mt-1 text-xs leading-5 text-[#2F2A25]/60">
+                                    {notification.message}
+                                  </p>
+
+                                </div>
+
+                              </div>
+
+                            </button>
+                          )
+                        )
+
+                      )}
+
+                    </div>
+
+                  </div>
+                )}
+
+              </div>
+
+              <button
+                onClick={() => navigate("/food-listings")}
+                className="flex-1 rounded-xl bg-[#006B3F] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#005531] md:flex-none"
+              >
+                {isDonor
+                  ? "+ Add Food Listing"
+                  : "Browse Available Food"}
+              </button>
+
+            </div>
 
           </div>
 
@@ -433,8 +842,9 @@ function Dashboard() {
                   </h2>
 
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-[#2F2A25]/60">
-                    Manage scheduled collections and keep recipients
-                    informed about when their food is ready.
+                    Manage scheduled collections and keep
+                    recipients informed about when their food
+                    is ready.
                   </p>
 
                 </div>
@@ -511,8 +921,8 @@ function Dashboard() {
                     </h2>
 
                     <p className="mt-3 max-w-md text-sm leading-6 text-[#2F2A25]/60">
-                      Create, view and manage the surplus food you have
-                      made available through FoodBridge.
+                      Create, view and manage the surplus food
+                      you have made available through FoodBridge.
                     </p>
 
                   </div>
@@ -547,8 +957,8 @@ function Dashboard() {
                     </h2>
 
                     <p className="mt-3 max-w-md text-sm leading-6 text-[#2F2A25]/60">
-                      Review requests from recipients and manage the next
-                      step for your available food.
+                      Review requests from recipients and manage
+                      the next step for your available food.
                     </p>
 
                   </div>
@@ -633,13 +1043,16 @@ function Dashboard() {
                           </p>
 
                           <p className="mt-1 text-sm text-[#2F2A25]/50">
-                            {request.quantity_requested} portions requested
+                            {request.quantity_requested} portions
+                            requested
                           </p>
 
                           {request.pickup_date && (
                             <p className="mt-2 text-xs font-medium text-[#2F2A25]/55">
                               Pickup:{" "}
-                              {formatPickupDate(request.pickup_date)}
+                              {formatPickupDate(
+                                request.pickup_date
+                              )}
 
                               {request.pickup_time
                                 ? ` · ${formatPickupTime(
@@ -669,11 +1082,9 @@ function Dashboard() {
 
                           {request.pickup_status && (
                             <span
-                              className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${
-                                pickupStatusClasses(
-                                  request.pickup_status
-                                )
-                              }`}
+                              className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${pickupStatusClasses(
+                                request.pickup_status
+                              )}`}
                             >
                               {formatPickupStatus(
                                 request.pickup_status
@@ -814,8 +1225,8 @@ function Dashboard() {
                   </h2>
 
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-[#2F2A25]/60">
-                    Check your scheduled pickup information and see
-                    when food is ready for collection.
+                    Check your scheduled pickup information
+                    and see when food is ready for collection.
                   </p>
 
                 </div>
@@ -916,8 +1327,8 @@ function Dashboard() {
                 </h2>
 
                 <p className="mt-3 max-w-md text-sm leading-6 text-[#2F2A25]/60">
-                  Track your requests, pickup details and collection
-                  status in one place.
+                  Track your requests, pickup details and
+                  collection status in one place.
                 </p>
 
                 <button
@@ -994,13 +1405,16 @@ function Dashboard() {
                           </p>
 
                           <p className="mt-1 text-sm text-[#2F2A25]/50">
-                            {request.quantity_requested} portions requested
+                            {request.quantity_requested} portions
+                            requested
                           </p>
 
                           {request.pickup_date && (
                             <p className="mt-2 text-xs font-medium text-[#2F2A25]/55">
                               Pickup:{" "}
-                              {formatPickupDate(request.pickup_date)}
+                              {formatPickupDate(
+                                request.pickup_date
+                              )}
 
                               {request.pickup_time
                                 ? ` · ${formatPickupTime(
@@ -1030,11 +1444,9 @@ function Dashboard() {
 
                           {request.pickup_status && (
                             <span
-                              className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${
-                                pickupStatusClasses(
-                                  request.pickup_status
-                                )
-                              }`}
+                              className={`w-fit rounded-full px-3 py-1 text-xs font-bold ${pickupStatusClasses(
+                                request.pickup_status
+                              )}`}
                             >
                               {formatPickupStatus(
                                 request.pickup_status

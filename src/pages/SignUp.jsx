@@ -2,6 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function SignUp() {
+  // =========================================================
+  // FORM DATA
+  // =========================================================
+
+  const [step, setStep] = useState(1);
+
   const [userType, setUserType] = useState("");
   const [accountType, setAccountType] = useState("");
 
@@ -11,6 +17,18 @@ function SignUp() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  // =========================================================
+  // PASSWORD VISIBILITY
+  // =========================================================
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // =========================================================
+  // SIGNUP / VERIFICATION STATE
+  // =========================================================
 
   const [signupComplete, setSignupComplete] = useState(false);
   const [createdEmail, setCreatedEmail] = useState("");
@@ -18,9 +36,9 @@ function SignUp() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // ============================================================
-  // PASSWORD RULES
-  // ============================================================
+  // =========================================================
+  // PASSWORD VALIDATION
+  // =========================================================
 
   const passwordRules = {
     length: password.length >= 8 && password.length <= 128,
@@ -38,12 +56,94 @@ function SignUp() {
     confirmPassword.length > 0 &&
     password === confirmPassword;
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
+  // =========================================================
+  // PASSWORD REQUIREMENT COMPONENT
+  // =========================================================
 
+  const PasswordRequirement = ({ valid, children }) => (
+    <div
+      className={`flex items-center gap-2 text-xs ${
+        valid ? "text-[#006B3F]" : "text-[#77716B]"
+      }`}
+    >
+      <span
+        className={`flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
+          valid
+            ? "bg-[#006B3F] text-white"
+            : "border border-[#CFC8BE] text-transparent"
+        }`}
+      >
+        ✓
+      </span>
+      {children}
+    </div>
+  );
+
+  // =========================================================
+  // EYE ICONS
+  // =========================================================
+
+  const EyeIcon = ({ visible }) => {
+    if (visible) {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="h-5 w-5"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c1.635 0 3.18-.374 4.554-1.04M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.774 3.162 10.066 7.5a10.523 10.523 0 01-4.132 5.411M6.228 6.228L3 3m3.228 3.228l3.75 3.75m7.794 7.794L21 21m-3.228-3.228l-3.75-3.75m0 0a3 3 0 10-4.243-4.243m4.243 4.243L9.78 9.78"
+          />
+        </svg>
+      );
+    }
+
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="h-5 w-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M2.062 12.348a1.978 1.978 0 010-.696C3.356 7.4 7.273 4.5 12 4.5s8.644 2.9 9.938 7.152c.04.13.04.268 0 .396C20.644 16.3 16.727 19.5 12 19.5s-8.644-3.2-9.938-7.152z"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+    );
+  };
+
+  // =========================================================
+  // STEP 1
+  // =========================================================
+
+  const handleStepOne = (e) => {
+    e.preventDefault();
     setErrorMessage("");
 
-    // Password validation
+    if (!firstName.trim() || !lastName.trim()) {
+      setErrorMessage("Please enter your first and last name.");
+      return;
+    }
+
+    if (!email.trim()) {
+      setErrorMessage("Please enter your email address.");
+      return;
+    }
+
     if (!passwordIsValid) {
       setErrorMessage(
         "Please make sure your password meets all the requirements."
@@ -51,10 +151,21 @@ function SignUp() {
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (!passwordsMatch) {
       setErrorMessage("Passwords do not match.");
       return;
     }
+
+    setStep(2);
+  };
+
+  // =========================================================
+  // STEP 2
+  // =========================================================
+
+  const handleStepTwo = (e) => {
+    e.preventDefault();
+    setErrorMessage("");
 
     if (!userType) {
       setErrorMessage("Please select what describes you.");
@@ -63,6 +174,29 @@ function SignUp() {
 
     if (!accountType) {
       setErrorMessage("Please select how you will use FoodBridge.");
+      return;
+    }
+
+    setStep(3);
+  };
+
+  // =========================================================
+  // STEP 3 / CREATE ACCOUNT
+  // =========================================================
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+
+    if (!phone.trim()) {
+      setErrorMessage("Please enter your phone number.");
+      return;
+    }
+
+    if (!termsAccepted) {
+      setErrorMessage(
+        "Please agree to the Terms of Service and Privacy Policy."
+      );
       return;
     }
 
@@ -77,11 +211,11 @@ function SignUp() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            first_name: firstName,
-            last_name: lastName,
-            email,
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            email: email.trim().toLowerCase(),
             password,
-            phone,
+            phone: phone.trim(),
             user_type: userType,
             account_type: accountType,
           }),
@@ -91,9 +225,7 @@ function SignUp() {
       const data = await response.json();
 
       if (!response.ok) {
-        setErrorMessage(
-          data.error || "Unable to create your account."
-        );
+        setErrorMessage(data.error || "Unable to create your account.");
         return;
       }
 
@@ -113,771 +245,657 @@ function SignUp() {
     }
   };
 
-  // ============================================================
-  // PASSWORD REQUIREMENT ITEM
-  // ============================================================
-
-  const PasswordRequirement = ({ valid, children }) => (
-    <div className="flex items-center gap-2">
-      <span
-        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-          valid
-            ? "bg-[#006B3F] text-white"
-            : "border border-[#2F2A25]/20 text-transparent"
-        }`}
-      >
-        ✓
-      </span>
-
-      <span
-        className={`text-xs ${
-          valid
-            ? "text-[#006B3F]"
-            : "text-[#2F2A25]/50"
-        }`}
-      >
-        {children}
-      </span>
-    </div>
-  );
-
-  // ============================================================
+  // =========================================================
   // EMAIL VERIFICATION SCREEN
-  // ============================================================
+  // =========================================================
 
   if (signupComplete) {
     return (
-      <div className="min-h-screen bg-[#F8F6F1] text-[#2F2A25]">
+      <main className="min-h-screen bg-[#FCFBF7] px-4 py-10 text-[#2F2A25]">
+        <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl bg-white shadow-xl">
+          <div className="h-2 bg-[#D9A441]" />
 
-        {/* GHANA ACCENT */}
-        <div className="h-1.5 w-full bg-[linear-gradient(to_right,#CE1126_33.33%,#FCD116_33.33%,#FCD116_66.66%,#006B3F_66.66%)]"></div>
-
-        <main className="relative flex min-h-[calc(100vh-6px)] items-center justify-center overflow-hidden px-5 py-12 sm:px-8">
-
-          {/* Background decoration */}
-
-          <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-[#006B3F]/5 blur-3xl"></div>
-
-          <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-[#D9A441]/8 blur-3xl"></div>
-
-          {/* SUCCESS CARD */}
-
-          <div className="relative z-10 w-full max-w-xl rounded-[28px] border border-[#2F2A25]/8 bg-white p-7 text-center shadow-[0_25px_70px_rgba(47,42,37,0.12)] sm:p-10 lg:p-12">
-
-            {/* LOGO */}
-
-            <div className="mx-auto mb-7 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#006B3F] shadow-md ring-4 ring-[#006B3F]/10">
-              <img
-                src="/images/logo.jpg"
-                alt="FoodBridge logo"
-                className="h-14 w-14 rounded-full object-cover"
-              />
+          <div className="px-6 py-12 text-center sm:px-12">
+            <div className="mb-8 flex justify-center">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#006B3F] text-2xl font-bold text-white">
+                F
+              </div>
             </div>
 
-            {/* SUCCESS ICON */}
-
-            <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-[#006B3F]/10 text-2xl font-bold text-[#006B3F]">
-              ✓
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#E4F2EA]">
+              <span className="text-4xl text-[#006B3F]">✓</span>
             </div>
 
-            {/* LABEL */}
-
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.15em] text-[#006B3F]">
-              Account created successfully
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-[#D9A441]">
+              Welcome to FoodBridge
             </p>
 
-            {/* HEADING */}
-
-            <h1 className="text-3xl font-bold tracking-tight text-[#2F2A25] sm:text-4xl">
-              Verify your email
+            <h1 className="mb-4 text-3xl font-bold text-[#17241E] sm:text-4xl">
+              Account created successfully
             </h1>
 
-            {/* MESSAGE */}
-
-            <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-[#2F2A25]/60 sm:text-base">
-              We've created your FoodBridge account. Before you
-              continue, verify your email address using the link we
-              sent you.
+            <p className="mx-auto mb-8 max-w-lg leading-7 text-[#6F6963]">
+              We've created your FoodBridge account. One last step: verify
+              your email address before you can log in.
             </p>
 
-            {/* EMAIL */}
-
-            <div className="mt-6 rounded-2xl border border-[#006B3F]/15 bg-[#006B3F]/5 px-5 py-4">
-
-              <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-[#2F2A25]/45">
+            <div className="mb-8 rounded-2xl bg-[#F8F1E5] px-5 py-5">
+              <p className="mb-1 text-sm text-[#77716B]">
                 Verification email sent to
               </p>
 
-              <p className="break-all font-bold text-[#006B3F]">
+              <p className="break-all font-semibold text-[#17241E]">
                 {createdEmail}
               </p>
-
             </div>
 
-            {/* NEXT STEPS */}
+            <div className="mb-8 rounded-2xl border border-[#E8E0D5] bg-white p-6 text-left">
+              <h2 className="mb-4 font-bold text-[#17241E]">
+                What happens next?
+              </h2>
 
-            <div className="mt-7 rounded-2xl border border-[#2F2A25]/8 bg-[#FCFBF8] p-5 text-left">
-
-              <p className="font-bold text-[#2F2A25]">
-                What to do next
-              </p>
-
-              <ol className="mt-4 space-y-4">
-
-                <li className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-xs font-bold text-white">
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-sm font-bold text-white">
                     1
-                  </span>
+                  </div>
+                  <p className="text-sm leading-6 text-[#6F6963]">
+                    Open the verification email we sent you.
+                  </p>
+                </div>
 
-                  <span className="pt-1 text-sm leading-5 text-[#2F2A25]/65">
-                    Open the verification email in your inbox.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-xs font-bold text-white">
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-sm font-bold text-white">
                     2
-                  </span>
+                  </div>
+                  <p className="text-sm leading-6 text-[#6F6963]">
+                    Click the verification link in the email.
+                  </p>
+                </div>
 
-                  <span className="pt-1 text-sm leading-5 text-[#2F2A25]/65">
-                    Click <strong>Verify My Email</strong>.
-                  </span>
-                </li>
-
-                <li className="flex gap-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-xs font-bold text-white">
+                <div className="flex gap-3">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-sm font-bold text-white">
                     3
-                  </span>
-
-                  <span className="pt-1 text-sm leading-5 text-[#2F2A25]/65">
+                  </div>
+                  <p className="text-sm leading-6 text-[#6F6963]">
                     Return to FoodBridge and log in.
-                  </span>
-                </li>
-
-              </ol>
-
+                  </p>
+                </div>
+              </div>
             </div>
 
-            {/* EXPIRATION */}
-
-            <div className="mt-5 rounded-xl bg-[#D9A441]/10 px-5 py-4 text-sm leading-6 text-[#2F2A25]/65">
-
-              <strong className="text-[#2F2A25]">
-                Your verification link expires in 10 minutes.
-              </strong>
-
-            </div>
-
-            {/* SPAM NOTICE */}
-
-            <div className="mt-4 text-left">
-
-              <p className="text-sm font-bold text-[#2F2A25]">
-                Didn't receive the email?
-              </p>
-
-              <p className="mt-1 text-xs leading-5 text-[#2F2A25]/50">
-                Check your spam or junk folder and make sure you are
-                checking the inbox for the email address shown above.
-              </p>
-
-            </div>
-
-            {/* LOGIN BUTTON */}
+            <p className="mb-6 text-xs leading-5 text-[#77716B]">
+              The verification link expires in 10 minutes. If you don't see
+              the email, please check your spam or junk folder.
+            </p>
 
             <Link
               to="/login"
-              className="mt-7 block w-full rounded-xl bg-[#006B3F] px-6 py-3.5 font-bold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#005531] hover:shadow-lg"
+              className="inline-flex w-full items-center justify-center rounded-xl bg-[#006B3F] px-6 py-3.5 font-semibold text-white transition hover:bg-[#005631] sm:w-auto"
             >
               Go to Login
             </Link>
-
           </div>
-
-        </main>
-
-      </div>
+        </div>
+      </main>
     );
   }
 
-  // ============================================================
-  // SIGN UP FORM
-  // ============================================================
+  // =========================================================
+  // MAIN SIGNUP PAGE
+  // =========================================================
 
   return (
-    <div className="min-h-screen bg-[#F8F6F1] text-[#2F2A25]">
-
-      {/* GHANA ACCENT */}
-
-      <div className="h-1.5 w-full bg-[linear-gradient(to_right,#CE1126_33.33%,#FCD116_33.33%,#006B3F_66.66%)]"></div>
-
-      {/* SIGN UP AREA */}
-
-      <main className="relative flex items-center justify-center overflow-hidden px-5 py-10 sm:px-8 sm:py-14 lg:py-16">
-
-        {/* Background decoration */}
-
-        <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-[#006B3F]/5 blur-3xl"></div>
-
-        <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-[#D9A441]/8 blur-3xl"></div>
-
-        {/* SIGN UP CARD */}
-
-        <div className="relative z-10 grid w-full max-w-6xl overflow-hidden rounded-[28px] border border-[#2F2A25]/8 bg-white shadow-[0_25px_70px_rgba(47,42,37,0.12)] md:grid-cols-[0.8fr_1.2fr]">
-
-          {/* LEFT BRAND PANEL */}
-
-          <div className="relative hidden overflow-hidden bg-[#006B3F] p-10 text-white md:flex md:flex-col md:justify-between lg:p-12">
-
-            {/* Decorative shapes */}
-
-            <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full border-[45px] border-[#FCD116]/10"></div>
-
-            <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full border-[50px] border-white/5"></div>
-
-            <div className="relative">
-
-              {/* LOGO */}
-
-              <div className="mb-10 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg ring-4 ring-white/10">
-                <img
-                  src="/images/logo.jpg"
-                  alt="FoodBridge logo"
-                  className="h-14 w-14 rounded-full object-cover"
-                />
-              </div>
-
-              {/* LABEL */}
-
-              <div className="mb-4 flex items-center gap-3">
-
-                <span className="h-px w-8 bg-[#FCD116]"></span>
-
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#FCD116]">
-                  Join FoodBridge
-                </p>
-
-              </div>
-
-              {/* MAIN MESSAGE */}
-
-              <h2 className="max-w-md text-4xl font-bold leading-[1.08] lg:text-5xl">
-                Give surplus food
-                <span className="block text-[#FCD116]">
-                  a purpose.
-                </span>
-              </h2>
-
-              <p className="mt-6 max-w-md text-base leading-7 text-white/75">
-                Become part of a community working to connect surplus
-                food with people and organizations that need it.
-              </p>
-
+    <main className="min-h-screen bg-[#FCFBF7] px-4 py-8 text-[#2F2A25] sm:py-12">
+      <div className="mx-auto max-w-5xl">
+        {/* HEADER */}
+        <div className="mb-8 text-center">
+          <Link to="/" className="mb-5 inline-flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#006B3F] font-bold text-white">
+              F
             </div>
 
-            {/* WHO CAN JOIN */}
+            <span className="text-xl font-bold text-[#17241E]">
+              FoodBridge
+            </span>
+          </Link>
 
-            <div className="relative mt-12">
+          <h1 className="mb-2 text-3xl font-bold text-[#17241E] sm:text-4xl">
+            Join FoodBridge
+          </h1>
 
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-white/50">
-                Who can join?
-              </p>
+          <p className="text-[#77716B]">Born in Ghana. Built for Africa.</p>
+        </div>
 
-              <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
-
-                <div className="border-l-2 border-[#FCD116] pl-3">
-                  Food Businesses
-                </div>
-
-                <div className="border-l-2 border-[#CE1126] pl-3">
-                  Organizations
-                </div>
-
-                <div className="border-l-2 border-white/40 pl-3">
-                  Individuals
-                </div>
-
-                <div className="border-l-2 border-[#FCD116] pl-3">
-                  Volunteers
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* FORM AREA */}
-
-          <div className="p-7 sm:p-10 lg:p-12">
-
-            {/* MOBILE BRAND */}
-
-            <div className="mb-9 flex flex-col items-center text-center md:hidden">
-
-              <div className="mb-4 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#006B3F] shadow-md ring-4 ring-[#006B3F]/10">
-                <img
-                  src="/images/logo.jpg"
-                  alt="FoodBridge logo"
-                  className="h-14 w-14 rounded-full object-cover"
-                />
-              </div>
-
-              <p className="text-sm font-bold text-[#006B3F]">
-                FoodBridge
-              </p>
-
-              <p className="mt-1 text-xs font-medium text-[#2F2A25]/45">
-                Born in Ghana. Built for Africa.
-              </p>
-
-            </div>
-
-            {/* HEADING */}
-
-            <div className="mb-8">
-
-              <p className="mb-2 text-sm font-bold uppercase tracking-[0.12em] text-[#006B3F]">
-                Create your account
-              </p>
-
-              <h1 className="text-3xl font-bold tracking-tight text-[#2F2A25] sm:text-4xl">
-                Join FoodBridge
-              </h1>
-
-              <p className="mt-3 max-w-lg text-sm leading-6 text-[#2F2A25]/55 sm:text-base">
-                Create your account and become part of the food-sharing
-                community.
-              </p>
-
-            </div>
-
-            {/* ERROR */}
-
-            {errorMessage && (
-              <div className="mb-6 rounded-2xl border border-[#C65D3A]/20 bg-[#C65D3A]/8 p-4">
-
-                <div className="flex gap-3">
-
-                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#C65D3A]/15 text-xs font-bold text-[#C65D3A]">
-                    !
+        {/* PROGRESS */}
+        <div className="mx-auto mb-8 max-w-2xl">
+          <div className="flex items-center justify-between">
+            {[1, 2, 3].map((number) => (
+              <div
+                key={number}
+                className="flex flex-1 items-center"
+              >
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${
+                      step >= number
+                        ? "bg-[#006B3F] text-white"
+                        : "border border-[#D8D0C5] bg-white text-[#9B948C]"
+                    }`}
+                  >
+                    {number}
                   </div>
 
-                  <p className="text-sm leading-6 text-[#C65D3A]">
-                    {errorMessage}
-                  </p>
-
+                  <span
+                    className={`mt-2 hidden text-xs font-medium sm:block ${
+                      step >= number
+                        ? "text-[#006B3F]"
+                        : "text-[#9B948C]"
+                    }`}
+                  >
+                    {number === 1
+                      ? "Account"
+                      : number === 2
+                      ? "About You"
+                      : "Finish"}
+                  </span>
                 </div>
 
-              </div>
-            )}
-
-            {/* FORM */}
-
-            <form
-              className="space-y-5"
-              onSubmit={handleSignUp}
-            >
-
-              {/* USER TYPE + ACCOUNT TYPE */}
-
-              <div className="grid gap-5 sm:grid-cols-2">
-
-                {/* USER TYPE */}
-
-                <div>
-
-                  <label
-                    htmlFor="userType"
-                    className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                  >
-                    What describes you?
-                  </label>
-
-                  <select
-                    id="userType"
-                    name="userType"
-                    required
-                    value={userType}
-                    onChange={(e) => setUserType(e.target.value)}
-                    className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                  >
-
-                    <option value="" disabled>
-                      Select an option
-                    </option>
-
-                    <option value="food-business">
-                      Food Business
-                    </option>
-
-                    <option value="organization">
-                      Organization
-                    </option>
-
-                    <option value="individual">
-                      Individual
-                    </option>
-
-                    <option value="volunteer">
-                      Volunteer
-                    </option>
-
-                  </select>
-
-                </div>
-
-                {/* ACCOUNT TYPE */}
-
-                <div>
-
-                  <label
-                    htmlFor="accountType"
-                    className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                  >
-                    How will you use FoodBridge?
-                  </label>
-
-                  <select
-                    id="accountType"
-                    name="accountType"
-                    required
-                    value={accountType}
-                    onChange={(e) => setAccountType(e.target.value)}
-                    className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                  >
-
-                    <option value="" disabled>
-                      Select how you will use FoodBridge
-                    </option>
-
-                    <option value="donor">
-                      Donate surplus food
-                    </option>
-
-                    <option value="recipient">
-                      Receive or request food
-                    </option>
-
-                  </select>
-
-                </div>
-
-              </div>
-
-              {/* NAME */}
-
-              <div className="grid gap-5 sm:grid-cols-2">
-
-                {/* FIRST NAME */}
-
-                <div>
-
-                  <label
-                    htmlFor="firstName"
-                    className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                  >
-                    First Name
-                  </label>
-
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    placeholder="First name"
-                    required
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                  />
-
-                </div>
-
-                {/* LAST NAME */}
-
-                <div>
-
-                  <label
-                    htmlFor="lastName"
-                    className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                  >
-                    Last Name
-                  </label>
-
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Last name"
-                    required
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                  />
-
-                </div>
-
-              </div>
-
-              {/* EMAIL */}
-
-              <div>
-
-                <label
-                  htmlFor="email"
-                  className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                >
-                  Email Address
-                </label>
-
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="you@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                />
-
-              </div>
-
-              {/* PHONE */}
-
-              <div>
-
-                <label
-                  htmlFor="phone"
-                  className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                >
-                  Phone Number
-                </label>
-
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  placeholder="+233 XX XXX XXXX"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-xl border border-[#2F2A25]/12 bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:border-[#006B3F] focus:bg-white focus:ring-4 focus:ring-[#006B3F]/8"
-                />
-
-              </div>
-
-              {/* PASSWORD */}
-
-              <div className="grid gap-5 sm:grid-cols-2">
-
-                <div>
-
-                  <label
-                    htmlFor="password"
-                    className="mb-2 block text-sm font-bold text-[#2F2A25]"
-                  >
-                    Password
-                  </label>
-
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Create password"
-                    required
-                    minLength={8}
-                    maxLength={128}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={`w-full rounded-xl border bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:bg-white focus:ring-4 ${
-                      password.length === 0
-                        ? "border-[#2F2A25]/12 focus:border-[#006B3F] focus:ring-[#006B3F]/8"
-                        : passwordIsValid
-                        ? "border-[#006B3F]/40 focus:border-[#006B3F] focus:ring-[#006B3F]/8"
-                        : "border-[#C65D3A]/40 focus:border-[#C65D3A] focus:ring-[#C65D3A]/8"
+                {number !== 3 && (
+                  <div
+                    className={`mx-2 h-[2px] flex-1 ${
+                      step > number
+                        ? "bg-[#006B3F]"
+                        : "bg-[#E1DAD0]"
                     }`}
                   />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-                  {/* PASSWORD REQUIREMENTS */}
+        {/* CARD */}
+        <div className="mx-auto max-w-2xl overflow-hidden rounded-3xl bg-white shadow-lg">
+          <div className="h-2 bg-[#006B3F]" />
 
-                  <div className="mt-3 rounded-xl border border-[#2F2A25]/8 bg-[#FCFBF8] p-3.5">
+          <div className="p-6 sm:p-10">
+            {/* =====================================================
+                STEP 1
+            ===================================================== */}
 
-                    <p className="mb-3 text-xs font-bold text-[#2F2A25]/65">
-                      Password must contain:
+            {step === 1 && (
+              <form onSubmit={handleStepOne}>
+                <div className="mb-8">
+                  <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-[#D9A441]">
+                    Step 1 of 3
+                  </p>
+
+                  <h2 className="mb-2 text-2xl font-bold text-[#17241E]">
+                    Create your account
+                  </h2>
+
+                  <p className="text-sm leading-6 text-[#77716B]">
+                    Start with the basics. You can tell us more about
+                    yourself in the next step.
+                  </p>
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  {/* First name */}
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold">
+                      First name
+                    </label>
+
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Amanda"
+                      className="w-full rounded-xl border border-[#D8D0C5] bg-[#FCFBF7] px-4 py-3 outline-none transition focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/10"
+                    />
+                  </div>
+
+                  {/* Last name */}
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold">
+                      Last name
+                    </label>
+
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Mensah-Biney"
+                      className="w-full rounded-xl border border-[#D8D0C5] bg-[#FCFBF7] px-4 py-3 outline-none transition focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/10"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className="sm:col-span-2">
+                    <label className="mb-2 block text-sm font-semibold">
+                      Email address
+                    </label>
+
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full rounded-xl border border-[#D8D0C5] bg-[#FCFBF7] px-4 py-3 outline-none transition focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/10"
+                    />
+                  </div>
+
+                  {/* Password */}
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold">
+                      Password
+                    </label>
+
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Create a password"
+                        className="w-full rounded-xl border border-[#D8D0C5] bg-[#FCFBF7] px-4 py-3 pr-12 outline-none transition focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/10"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={
+                          showPassword
+                            ? "Hide password"
+                            : "Show password"
+                        }
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#77716B] transition hover:text-[#006B3F]"
+                      >
+                        <EyeIcon visible={showPassword} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Confirm password */}
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold">
+                      Confirm password
+                    </label>
+
+                    <div className="relative">
+                      <input
+                        type={
+                          showConfirmPassword ? "text" : "password"
+                        }
+                        value={confirmPassword}
+                        onChange={(e) =>
+                          setConfirmPassword(e.target.value)
+                        }
+                        placeholder="Repeat your password"
+                        className="w-full rounded-xl border border-[#D8D0C5] bg-[#FCFBF7] px-4 py-3 pr-12 outline-none transition focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/10"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                        aria-label={
+                          showConfirmPassword
+                            ? "Hide confirm password"
+                            : "Show confirm password"
+                        }
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#77716B] transition hover:text-[#006B3F]"
+                      >
+                        <EyeIcon visible={showConfirmPassword} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Password rules */}
+                {password.length > 0 && (
+                  <div className="mt-5 rounded-2xl bg-[#F8F1E5] p-4">
+                    <p className="mb-3 text-sm font-semibold">
+                      Password requirements
                     </p>
 
-                    <div className="grid grid-cols-1 gap-2">
-
+                    <div className="grid gap-2 sm:grid-cols-2">
                       <PasswordRequirement valid={passwordRules.length}>
                         8–128 characters
                       </PasswordRequirement>
 
-                      <PasswordRequirement valid={passwordRules.uppercase}>
-                        At least one uppercase letter
+                      <PasswordRequirement
+                        valid={passwordRules.uppercase}
+                      >
+                        One uppercase letter
                       </PasswordRequirement>
 
-                      <PasswordRequirement valid={passwordRules.lowercase}>
-                        At least one lowercase letter
+                      <PasswordRequirement
+                        valid={passwordRules.lowercase}
+                      >
+                        One lowercase letter
                       </PasswordRequirement>
 
                       <PasswordRequirement valid={passwordRules.number}>
-                        At least one number
+                        One number
                       </PasswordRequirement>
 
                       <PasswordRequirement valid={passwordRules.special}>
-                        At least one special character
+                        One special character
                       </PasswordRequirement>
 
-                      <PasswordRequirement valid={passwordRules.noSpaces}>
+                      <PasswordRequirement
+                        valid={passwordRules.noSpaces}
+                      >
                         No spaces
                       </PasswordRequirement>
-
                     </div>
-
                   </div>
+                )}
 
+                {errorMessage && (
+                  <div className="mt-5 rounded-xl bg-[#FDECEA] px-4 py-3 text-sm text-[#A33A2B]">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="mt-7 w-full rounded-xl bg-[#006B3F] px-6 py-3.5 font-semibold text-white transition hover:bg-[#005631]"
+                >
+                  Continue
+                </button>
+
+                <p className="mt-6 text-center text-sm text-[#77716B]">
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="font-semibold text-[#006B3F] hover:underline"
+                  >
+                    Log in
+                  </Link>
+                </p>
+              </form>
+            )}
+
+            {/* =====================================================
+                STEP 2
+            ===================================================== */}
+
+            {step === 2 && (
+              <form onSubmit={handleStepTwo}>
+                <div className="mb-8">
+                  <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-[#D9A441]">
+                    Step 2 of 3
+                  </p>
+
+                  <h2 className="mb-2 text-2xl font-bold text-[#17241E]">
+                    Tell us about yourself
+                  </h2>
+
+                  <p className="text-sm leading-6 text-[#77716B]">
+                    This helps us create the right FoodBridge experience
+                    for you.
+                  </p>
                 </div>
 
-                {/* CONFIRM PASSWORD */}
+                {/* User type */}
+                <div className="mb-8">
+                  <label className="mb-3 block text-sm font-semibold">
+                    What describes you?
+                  </label>
 
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {[
+                      [
+                        "individual",
+                        "Individual",
+                        "Joining to help or receive support",
+                      ],
+                      [
+                        "food-business",
+                        "Food Business",
+                        "Restaurant, caterer, shop or food business",
+                      ],
+                      [
+                        "organization",
+                        "Organization",
+                        "NGO, charity, school or community group",
+                      ],
+                      [
+                        "volunteer",
+                        "Volunteer",
+                        "I want to support FoodBridge activities",
+                      ],
+                    ].map(([value, title, description]) => (
+                      <button
+                        type="button"
+                        key={value}
+                        onClick={() => setUserType(value)}
+                        className={`rounded-2xl border p-4 text-left transition ${
+                          userType === value
+                            ? "border-[#006B3F] bg-[#EAF5EF] ring-2 ring-[#006B3F]/10"
+                            : "border-[#DDD5CA] bg-white hover:border-[#006B3F]"
+                        }`}
+                      >
+                        <p className="mb-1 font-semibold text-[#17241E]">
+                          {title}
+                        </p>
+
+                        <p className="text-xs leading-5 text-[#77716B]">
+                          {description}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Account type */}
                 <div>
+                  <label className="mb-3 block text-sm font-semibold">
+                    How will you use FoodBridge?
+                  </label>
 
-                  <label
-                    htmlFor="confirmPassword"
-                    className="mb-2 block text-sm font-bold text-[#2F2A25]"
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => setAccountType("donor")}
+                      className={`rounded-2xl border p-5 text-left transition ${
+                        accountType === "donor"
+                          ? "border-[#006B3F] bg-[#EAF5EF] ring-2 ring-[#006B3F]/10"
+                          : "border-[#DDD5CA] hover:border-[#006B3F]"
+                      }`}
+                    >
+                      <p className="mb-1 font-semibold text-[#17241E]">
+                        Donate surplus food
+                      </p>
+
+                      <p className="text-xs leading-5 text-[#77716B]">
+                        Share safe surplus food with people and
+                        organizations that need it.
+                      </p>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setAccountType("recipient")}
+                      className={`rounded-2xl border p-5 text-left transition ${
+                        accountType === "recipient"
+                          ? "border-[#006B3F] bg-[#EAF5EF] ring-2 ring-[#006B3F]/10"
+                          : "border-[#DDD5CA] hover:border-[#006B3F]"
+                      }`}
+                    >
+                      <p className="mb-1 font-semibold text-[#17241E]">
+                        Receive food
+                      </p>
+
+                      <p className="text-xs leading-5 text-[#77716B]">
+                        Find and request available surplus food.
+                      </p>
+                    </button>
+                  </div>
+                </div>
+
+                {errorMessage && (
+                  <div className="mt-5 rounded-xl bg-[#FDECEA] px-4 py-3 text-sm text-[#A33A2B]">
+                    {errorMessage}
+                  </div>
+                )}
+
+                <div className="mt-7 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setErrorMessage("");
+                      setStep(1);
+                    }}
+                    className="w-1/3 rounded-xl border border-[#D8D0C5] px-4 py-3.5 font-semibold text-[#2F2A25] transition hover:bg-[#F8F1E5]"
                   >
-                    Confirm Password
+                    Back
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="w-2/3 rounded-xl bg-[#006B3F] px-6 py-3.5 font-semibold text-white transition hover:bg-[#005631]"
+                  >
+                    Continue
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* =====================================================
+                STEP 3
+            ===================================================== */}
+
+            {step === 3 && (
+              <form onSubmit={handleSignUp}>
+                <div className="mb-8">
+                  <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-[#D9A441]">
+                    Step 3 of 3
+                  </p>
+
+                  <h2 className="mb-2 text-2xl font-bold text-[#17241E]">
+                    Almost there
+                  </h2>
+
+                  <p className="text-sm leading-6 text-[#77716B]">
+                    Add your phone number and agree to our terms to
+                    complete your FoodBridge account.
+                  </p>
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="mb-2 block text-sm font-semibold">
+                    Phone number
                   </label>
 
                   <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="Repeat password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) =>
-                      setConfirmPassword(e.target.value)
-                    }
-                    className={`w-full rounded-xl border bg-[#FCFBF8] px-4 py-3.5 text-[#2F2A25] outline-none transition placeholder:text-[#2F2A25]/30 hover:border-[#2F2A25]/20 focus:bg-white focus:ring-4 ${
-                      confirmPassword.length === 0
-                        ? "border-[#2F2A25]/12 focus:border-[#006B3F] focus:ring-[#006B3F]/8"
-                        : passwordsMatch
-                        ? "border-[#006B3F]/40 focus:border-[#006B3F] focus:ring-[#006B3F]/8"
-                        : "border-[#C65D3A]/40 focus:border-[#C65D3A] focus:ring-[#C65D3A]/8"
-                    }`}
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="024 123 4567"
+                    className="w-full rounded-xl border border-[#D8D0C5] bg-[#FCFBF7] px-4 py-3 outline-none transition focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/10"
                   />
 
-                  {/* MATCH MESSAGE */}
-
-                  {confirmPassword.length > 0 && (
-                    <div className="mt-3 flex items-center gap-2">
-
-                      <span
-                        className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-                          passwordsMatch
-                            ? "bg-[#006B3F] text-white"
-                            : "border border-[#C65D3A] text-[#C65D3A]"
-                        }`}
-                      >
-                        {passwordsMatch ? "✓" : "!"}
-                      </span>
-
-                      <span
-                        className={`text-xs ${
-                          passwordsMatch
-                            ? "text-[#006B3F]"
-                            : "text-[#C65D3A]"
-                        }`}
-                      >
-                        {passwordsMatch
-                          ? "Passwords match"
-                          : "Passwords do not match"}
-                      </span>
-
-                    </div>
-                  )}
-
+                  <p className="mt-2 text-xs text-[#77716B]">
+                    We'll use this to support your FoodBridge account.
+                  </p>
                 </div>
 
-              </div>
+                {/* Summary */}
+                <div className="mt-7 rounded-2xl bg-[#F8F1E5] p-5">
+                  <p className="mb-3 text-sm font-semibold">
+                    Your account
+                  </p>
 
-              {/* TERMS */}
+                  <div className="space-y-2 text-sm text-[#6F6963]">
+                    <p>
+                      <span className="font-medium text-[#2F2A25]">
+                        Name:
+                      </span>{" "}
+                      {firstName} {lastName}
+                    </p>
 
-              <div className="flex items-start gap-3 pt-1">
+                    <p>
+                      <span className="font-medium text-[#2F2A25]">
+                        Email:
+                      </span>{" "}
+                      {email}
+                    </p>
 
-                <input
-                  type="checkbox"
-                  id="terms"
-                  name="terms"
-                  required
-                  className="mt-1 h-4 w-4 shrink-0 rounded border-[#2F2A25]/20 accent-[#006B3F]"
-                />
+                    <p>
+                      <span className="font-medium text-[#2F2A25]">
+                        Account:
+                      </span>{" "}
+                      {accountType === "donor"
+                        ? "Food Donor"
+                        : "Food Recipient"}
+                    </p>
+                  </div>
+                </div>
 
-                <label
-                  htmlFor="terms"
-                  className="text-xs leading-5 text-[#2F2A25]/55 sm:text-sm"
-                >
-                  I agree to FoodBridge's{" "}
-                  <a
-                    href="#"
-                    className="font-bold text-[#006B3F] transition hover:text-[#C65D3A]"
-                  >
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a
-                    href="#"
-                    className="font-bold text-[#006B3F] transition hover:text-[#C65D3A]"
-                  >
-                    Privacy Policy
-                  </a>
-                  .
+                {/* Terms */}
+                <label className="mt-6 flex cursor-pointer items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={(e) =>
+                      setTermsAccepted(e.target.checked)
+                    }
+                    className="mt-1 h-4 w-4 accent-[#006B3F]"
+                  />
+
+                  <span className="text-sm leading-6 text-[#6F6963]">
+                    I agree to FoodBridge's{" "}
+                    <span className="font-semibold text-[#006B3F]">
+                      Terms of Service
+                    </span>{" "}
+                    and{" "}
+                    <span className="font-semibold text-[#006B3F]">
+                      Privacy Policy
+                    </span>
+                    .
+                  </span>
                 </label>
 
-              </div>
+                {errorMessage && (
+                  <div className="mt-5 rounded-xl bg-[#FDECEA] px-4 py-3 text-sm text-[#A33A2B]">
+                    {errorMessage}
+                  </div>
+                )}
 
-              {/* SUBMIT BUTTON */}
+                <div className="mt-7 flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setErrorMessage("");
+                      setStep(2);
+                    }}
+                    className="w-1/3 rounded-xl border border-[#D8D0C5] px-4 py-3.5 font-semibold text-[#2F2A25] transition hover:bg-[#F8F1E5]"
+                  >
+                    Back
+                  </button>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="group relative w-full overflow-hidden rounded-xl bg-[#006B3F] px-6 py-3.5 font-bold text-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:bg-[#005531] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                <span className="relative z-10">
-                  {isSubmitting
-                    ? "Creating Account..."
-                    : "Create Account"}
-                </span>
-              </button>
-
-            </form>
-
-            {/* LOGIN LINK */}
-
-            <div className="mt-8 border-t border-[#2F2A25]/10 pt-6 text-center">
-
-              <p className="text-sm text-[#2F2A25]/55">
-                Already have a FoodBridge account?
-              </p>
-
-              <Link
-                to="/login"
-                className="mt-2 inline-block font-bold text-[#006B3F] transition hover:text-[#C65D3A]"
-              >
-                Log in
-              </Link>
-
-            </div>
-
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-2/3 rounded-xl bg-[#006B3F] px-6 py-3.5 font-semibold text-white transition hover:bg-[#005631] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isSubmitting
+                      ? "Creating account..."
+                      : "Create Account"}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
-
         </div>
-
-      </main>
-
-    </div>
+      </div>
+    </main>
   );
 }
 
