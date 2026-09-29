@@ -658,25 +658,73 @@ function FoodRequests() {
                             onChange={handlePickupChange}
                             className="mt-1 w-full rounded-xl border border-[#3F352C]/15 bg-white px-3 py-3 text-base outline-none focus:border-[#006B3F] focus:ring-2 focus:ring-[#006B3F]/20"
                           >
-                            <option value="scheduled">
-                              Scheduled
-                            </option>
+                            {request.pickup_status === "scheduled" && (
+                              <>
+                                <option value="scheduled">
+                                  Scheduled
+                                </option>
 
-                            <option value="ready_for_pickup">
-                              Ready for Pickup
-                            </option>
+                                <option value="ready_for_pickup">
+                                  Ready for Pickup
+                                </option>
 
-                            <option value="collected">
-                              Collected
-                            </option>
+                                <option value="missed">
+                                  Missed
+                                </option>
 
-                            <option value="missed">
-                              Missed
-                            </option>
+                                <option value="cancelled">
+                                  Cancelled
+                                </option>
+                              </>
+                            )}
 
-                            <option value="cancelled">
-                              Cancelled
-                            </option>
+                            {request.pickup_status === "ready_for_pickup" && (
+                              <>
+                                <option value="ready_for_pickup">
+                                  Ready for Pickup
+                                </option>
+
+                                <option value="collected">
+                                  Collected
+                                </option>
+
+                                <option value="missed">
+                                  Missed
+                                </option>
+
+                                <option value="cancelled">
+                                  Cancelled
+                                </option>
+                              </>
+                            )}
+
+                            {request.pickup_status === "missed" && (
+                              <>
+                                <option value="missed">
+                                  Missed
+                                </option>
+
+                                <option value="scheduled">
+                                  Scheduled
+                                </option>
+
+                                <option value="cancelled">
+                                  Cancelled
+                                </option>
+                              </>
+                            )}
+
+                            {request.pickup_status === "cancelled" && (
+                              <>
+                                <option value="cancelled">
+                                  Cancelled
+                                </option>
+
+                                <option value="scheduled">
+                                  Scheduled
+                                </option>
+                              </>
+                            )}
                           </select>
 
                         </div>
@@ -781,35 +829,44 @@ function FoodRequests() {
 
                     <div className="mt-auto space-y-3 pt-6">
 
-                      {pickupEditingId !== request.id && (
+                      {pickupEditingId !== request.id &&
+                        request.pickup_status !== "collected" && (
+                          <button
+                            onClick={() =>
+                              openPickupEditor(request)
+                            }
+                            className="w-full rounded-xl border-2 border-[#006B3F] px-4 py-3 font-bold text-[#006B3F] transition hover:bg-[#006B3F] hover:text-white"
+                          >
+                            {request.pickup_date
+                              ? "Edit Pickup Details"
+                              : "Schedule Pickup"}
+                          </button>
+                        )}
+
+                      {request.pickup_status === "collected" ? (
                         <button
                           onClick={() =>
-                            openPickupEditor(request)
+                            updateRequestStatus(
+                              request.id,
+                              "completed"
+                            )
                           }
-                          className="w-full rounded-xl border-2 border-[#006B3F] px-4 py-3 font-bold text-[#006B3F] transition hover:bg-[#006B3F] hover:text-white"
+                          disabled={
+                            updatingId === request.id
+                          }
+                          className="w-full rounded-xl bg-[#D9A441] px-4 py-3 font-bold text-white transition hover:bg-[#B8892F] disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                          {request.pickup_date
-                            ? "Edit Pickup Details"
-                            : "Schedule Pickup"}
+                          {updatingId === request.id
+                            ? "Updating..."
+                            : "Mark as Completed"}
                         </button>
+                      ) : (
+                        <p className="rounded-xl bg-[#FFF8E7] px-4 py-3 text-center text-sm font-medium text-[#8A6818]">
+                          Mark the pickup as{" "}
+                          <strong>Collected</strong> before
+                          completing this request.
+                        </p>
                       )}
-
-                      <button
-                        onClick={() =>
-                          updateRequestStatus(
-                            request.id,
-                            "completed"
-                          )
-                        }
-                        disabled={
-                          updatingId === request.id
-                        }
-                        className="w-full rounded-xl bg-[#D9A441] px-4 py-3 font-bold text-white transition hover:bg-[#B8892F] disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {updatingId === request.id
-                          ? "Updating..."
-                          : "Mark as Completed"}
-                      </button>
 
                     </div>
                   )}
