@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+
 function Dashboard() {
   const navigate = useNavigate();
 
@@ -104,7 +109,7 @@ function Dashboard() {
         const [notificationsResponse, unreadResponse] =
           await Promise.all([
             fetch(
-              "http://localhost:5000/api/notifications",
+              `${API_URL}/api/notifications`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -113,7 +118,7 @@ function Dashboard() {
             ),
 
             fetch(
-              "http://localhost:5000/api/notifications/unread-count",
+              `${API_URL}/api/notifications/unread-count`,
               {
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -154,7 +159,7 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/notifications/${notificationId}/read`,
+        `${API_URL}/api/notifications/${notificationId}/read`,
         {
           method: "PATCH",
           headers: {
@@ -198,7 +203,7 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        "http://localhost:5000/api/notifications/read-all",
+        `${API_URL}/api/notifications/read-all`,
         {
           method: "PATCH",
           headers: {
