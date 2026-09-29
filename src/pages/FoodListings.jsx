@@ -1,8 +1,11 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAlert } from "../components/AlertContext";
 
 function FoodListings() {
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
@@ -83,9 +86,16 @@ function FoodListings() {
       }
 
       await fetchListings();
+
+      showAlert(
+        "Food listing closed successfully.",
+        "success",
+        5000
+      );
     } catch (error) {
       console.error("Close food listing error:", error);
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setClosingId(null);
     }
@@ -132,9 +142,16 @@ function FoodListings() {
       }
 
       await fetchListings();
+
+      showAlert(
+        "Food listing deleted successfully.",
+        "success",
+        5000
+      );
     } catch (error) {
       console.error("Delete food listing error:", error);
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setDeletingId(null);
     }

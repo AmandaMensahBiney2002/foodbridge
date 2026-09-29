@@ -1,9 +1,12 @@
+
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAlert } from "../components/AlertContext";
 
 function FoodRequests() {
   const user = JSON.parse(localStorage.getItem("user"));
   const isDonor = user?.account_type === "donor";
+  const { showAlert } = useAlert();
 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,9 +88,27 @@ function FoodRequests() {
       }
 
       await fetchRequests();
+
+      if (status === "approved") {
+        showAlert(
+          "Food request approved successfully.",
+          "success"
+        );
+      } else if (status === "rejected") {
+        showAlert(
+          "Food request rejected.",
+          "success"
+        );
+      } else if (status === "completed") {
+        showAlert(
+          "Food request marked as completed.",
+          "success"
+        );
+      }
     } catch (error) {
       console.error("Update request error:", error);
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setUpdatingId(null);
     }
@@ -184,9 +205,15 @@ function FoodRequests() {
 
       await fetchRequests();
       closePickupEditor();
+
+      showAlert(
+        "Pickup details updated successfully.",
+        "success"
+      );
     } catch (error) {
       console.error("Pickup update error:", error);
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setUpdatingId(null);
     }
@@ -321,7 +348,6 @@ function FoodRequests() {
 
                 <div className="mt-6 space-y-4 text-sm">
 
-                  {/* REQUESTER PROFILE */}
                   {isDonor && (
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wide text-[#3F352C]/50">
@@ -883,3 +909,4 @@ function FoodRequests() {
 }
 
 export default FoodRequests;
+

@@ -1,8 +1,11 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../components/AlertContext";
 
 function CreateFoodListing() {
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const [foodName, setFoodName] = useState("");
   const [description, setDescription] = useState("");
@@ -50,10 +53,14 @@ function CreateFoodListing() {
         );
       }
 
+      showAlert("Food listing created successfully.", "success");
+
       navigate("/food-listings");
     } catch (error) {
       console.error("Create food listing error:", error);
+
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setLoading(false);
     }
@@ -187,3 +194,4 @@ function CreateFoodListing() {
 }
 
 export default CreateFoodListing;
+

@@ -1,9 +1,12 @@
+
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAlert } from "../components/AlertContext";
 
 function RequestFood() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const [quantity, setQuantity] = useState("");
   const [error, setError] = useState("");
@@ -41,10 +44,18 @@ function RequestFood() {
         );
       }
 
+      showAlert(
+        "Food request submitted successfully.",
+        "success",
+        5000
+      );
+
       navigate("/food-requests");
     } catch (error) {
       console.error("Food request error:", error);
+
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setLoading(false);
     }
@@ -105,3 +116,4 @@ function RequestFood() {
 }
 
 export default RequestFood;
+

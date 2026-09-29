@@ -1,10 +1,12 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAlert } from "../components/AlertContext";
 
 function EditFoodListing() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
@@ -103,10 +105,18 @@ function EditFoodListing() {
         );
       }
 
+      showAlert(
+        "Food listing updated successfully.",
+        "success",
+        5000
+      );
+
       navigate("/food-listings");
     } catch (error) {
       console.error("Edit food listing error:", error);
+
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setSaving(false);
     }

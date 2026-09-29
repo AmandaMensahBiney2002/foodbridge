@@ -1,10 +1,9 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
-
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -108,23 +107,17 @@ function Dashboard() {
 
         const [notificationsResponse, unreadResponse] =
           await Promise.all([
-            fetch(
-              `${API_URL}/api/notifications`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            ),
+            fetch(`${API_URL}/api/notifications`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
 
-            fetch(
-              `${API_URL}/api/notifications/unread-count`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            ),
+            fetch(`${API_URL}/api/notifications/unread-count`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
           ]);
 
         const notificationsData =
@@ -504,7 +497,6 @@ function Dashboard() {
                   className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-[#2F2A25]/10 bg-white text-[#2F2A25] shadow-sm transition hover:border-[#006B3F]/30 hover:bg-[#F8F6F1]"
                 >
 
-                  {/* Bell */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -720,8 +712,6 @@ function Dashboard() {
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-                {/* ACTIVE LISTINGS */}
-
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
                   <div className="flex items-center justify-between">
@@ -745,8 +735,6 @@ function Dashboard() {
                   </p>
 
                 </div>
-
-                {/* CLOSED LISTINGS */}
 
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
@@ -772,8 +760,6 @@ function Dashboard() {
 
                 </div>
 
-                {/* PENDING REQUESTS */}
-
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
                   <div className="flex items-center justify-between">
@@ -797,8 +783,6 @@ function Dashboard() {
                   </p>
 
                 </div>
-
-                {/* SCHEDULED PICKUPS */}
 
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
@@ -1135,8 +1119,6 @@ function Dashboard() {
 
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-                {/* PENDING */}
-
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
                   <p className="text-sm font-medium text-[#2F2A25]/55">
@@ -1152,8 +1134,6 @@ function Dashboard() {
                   </p>
 
                 </div>
-
-                {/* APPROVED */}
 
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
@@ -1171,8 +1151,6 @@ function Dashboard() {
 
                 </div>
 
-                {/* READY FOR COLLECTION */}
-
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
                   <p className="text-sm font-medium text-[#2F2A25]/55">
@@ -1188,8 +1166,6 @@ function Dashboard() {
                   </p>
 
                 </div>
-
-                {/* COMPLETED */}
 
                 <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
@@ -1293,8 +1269,6 @@ function Dashboard() {
 
             <section className="mt-10 grid gap-6 lg:grid-cols-2">
 
-              {/* FIND FOOD */}
-
               <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 
                 <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#006B3F]">
@@ -1318,8 +1292,6 @@ function Dashboard() {
                 </button>
 
               </div>
-
-              {/* MY REQUESTS */}
 
               <div className="rounded-2xl border border-[#2F2A25]/8 bg-white p-7 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
 

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -135,24 +136,28 @@ function SignUp() {
     setErrorMessage("");
 
     if (!firstName.trim() || !lastName.trim()) {
-      setErrorMessage("Please enter your first and last name.");
+      const message = "Please enter your first and last name.";
+      setErrorMessage(message);
       return;
     }
 
     if (!email.trim()) {
-      setErrorMessage("Please enter your email address.");
+      const message = "Please enter your email address.";
+      setErrorMessage(message);
       return;
     }
 
     if (!passwordIsValid) {
-      setErrorMessage(
-        "Please make sure your password meets all the requirements."
-      );
+      const message =
+        "Please make sure your password meets all the requirements.";
+
+      setErrorMessage(message);
       return;
     }
 
     if (!passwordsMatch) {
-      setErrorMessage("Passwords do not match.");
+      const message = "Passwords do not match.";
+      setErrorMessage(message);
       return;
     }
 
@@ -168,12 +173,14 @@ function SignUp() {
     setErrorMessage("");
 
     if (!userType) {
-      setErrorMessage("Please select what describes you.");
+      const message = "Please select what describes you.";
+      setErrorMessage(message);
       return;
     }
 
     if (!accountType) {
-      setErrorMessage("Please select how you will use FoodBridge.");
+      const message = "Please select how you will use FoodBridge.";
+      setErrorMessage(message);
       return;
     }
 
@@ -189,14 +196,16 @@ function SignUp() {
     setErrorMessage("");
 
     if (!phone.trim()) {
-      setErrorMessage("Please enter your phone number.");
+      const message = "Please enter your phone number.";
+      setErrorMessage(message);
       return;
     }
 
     if (!termsAccepted) {
-      setErrorMessage(
-        "Please agree to the Terms of Service and Privacy Policy."
-      );
+      const message =
+        "Please agree to the Terms of Service and Privacy Policy.";
+
+      setErrorMessage(message);
       return;
     }
 
@@ -225,7 +234,10 @@ function SignUp() {
       const data = await response.json();
 
       if (!response.ok) {
-        setErrorMessage(data.error || "Unable to create your account.");
+        const message =
+          data.error || "Unable to create your account.";
+
+        setErrorMessage(message);
         return;
       }
 
@@ -237,9 +249,10 @@ function SignUp() {
     } catch (error) {
       console.error("Signup error:", error);
 
-      setErrorMessage(
-        "Something went wrong while creating your account. Please try again."
-      );
+      const message =
+        "Something went wrong while creating your account. Please try again.";
+
+      setErrorMessage(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -299,6 +312,7 @@ function SignUp() {
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-sm font-bold text-white">
                     1
                   </div>
+
                   <p className="text-sm leading-6 text-[#6F6963]">
                     Open the verification email we sent you.
                   </p>
@@ -308,6 +322,7 @@ function SignUp() {
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-sm font-bold text-white">
                     2
                   </div>
+
                   <p className="text-sm leading-6 text-[#6F6963]">
                     Click the verification link in the email.
                   </p>
@@ -317,6 +332,7 @@ function SignUp() {
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#006B3F] text-sm font-bold text-white">
                     3
                   </div>
+
                   <p className="text-sm leading-6 text-[#6F6963]">
                     Return to FoodBridge and log in.
                   </p>
@@ -371,10 +387,7 @@ function SignUp() {
         <div className="mx-auto mb-8 max-w-2xl">
           <div className="flex items-center justify-between">
             {[1, 2, 3].map((number) => (
-              <div
-                key={number}
-                className="flex flex-1 items-center"
-              >
+              <div key={number} className="flex flex-1 items-center">
                 <div className="flex flex-col items-center">
                   <div
                     className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold ${
@@ -900,3 +913,4 @@ function SignUp() {
 }
 
 export default SignUp;
+

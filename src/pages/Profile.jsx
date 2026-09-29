@@ -1,8 +1,11 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../components/AlertContext";
 
 function Profile() {
   const navigate = useNavigate();
+  const { showAlert } = useAlert();
 
   const storedUser = JSON.parse(
     localStorage.getItem("user")
@@ -146,6 +149,12 @@ function Profile() {
       );
 
       setMessage("Profile updated successfully.");
+
+      showAlert(
+        "Profile updated successfully.",
+        "success"
+      );
+
       setIsEditing(false);
     } catch (error) {
       console.error(
@@ -154,6 +163,7 @@ function Profile() {
       );
 
       setError(error.message);
+      showAlert(error.message, "error");
     } finally {
       setSaving(false);
     }
@@ -662,3 +672,4 @@ function Profile() {
 }
 
 export default Profile;
+

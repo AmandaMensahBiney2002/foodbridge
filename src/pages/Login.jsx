@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -89,9 +90,10 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setErrorMessage(
-          data.error || "Unable to log in. Please try again."
-        );
+        const message =
+          data.error || "Unable to log in. Please try again.";
+
+        setErrorMessage(message);
 
         setIsLoggingIn(false);
         return;
@@ -106,9 +108,10 @@ function Login() {
     } catch (error) {
       console.error("Login error:", error);
 
-      setErrorMessage(
-        "Something went wrong. Please check your connection and try again."
-      );
+      const message =
+        "Something went wrong. Please check your connection and try again.";
+
+      setErrorMessage(message);
 
       setIsLoggingIn(false);
     }
@@ -140,23 +143,26 @@ function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setErrorMessage(
-          data.error || "Unable to resend the verification email."
-        );
+        const message =
+          data.error || "Unable to resend the verification email.";
+
+        setErrorMessage(message);
 
         setIsResending(false);
         return;
       }
 
-      setSuccessMessage(
-        data.message || "A new verification email has been sent."
-      );
+      const message =
+        data.message || "A new verification email has been sent.";
+
+      setSuccessMessage(message);
     } catch (error) {
       console.error("Resend verification error:", error);
 
-      setErrorMessage(
-        "Something went wrong while resending the verification email. Please try again."
-      );
+      const message =
+        "Something went wrong while resending the verification email. Please try again.";
+
+      setErrorMessage(message);
     }
 
     setIsResending(false);
@@ -195,15 +201,11 @@ function Login() {
 
           <div className="relative hidden overflow-hidden bg-[#006B3F] p-10 text-white md:flex md:flex-col md:justify-between lg:p-12">
 
-            {/* Decorative circle */}
-
             <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full border-[45px] border-[#FCD116]/10"></div>
 
             <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full border-[50px] border-white/5"></div>
 
             <div className="relative">
-
-              {/* Logo */}
 
               <div className="mb-10 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-white shadow-lg ring-4 ring-white/10">
                 <img
@@ -213,8 +215,6 @@ function Login() {
                 />
               </div>
 
-              {/* Small heading */}
-
               <div className="mb-4 flex items-center gap-3">
                 <span className="h-px w-8 bg-[#FCD116]"></span>
 
@@ -222,8 +222,6 @@ function Login() {
                   FoodBridge
                 </p>
               </div>
-
-              {/* Main message */}
 
               <h2 className="max-w-md text-4xl font-bold leading-[1.08] lg:text-5xl">
                 Good food should
@@ -238,8 +236,6 @@ function Login() {
               </p>
 
             </div>
-
-            {/* Bottom statement */}
 
             <div className="relative mt-12 border-l-2 border-[#FCD116] pl-5">
 
@@ -329,8 +325,6 @@ function Login() {
                       {errorMessage}
                     </p>
 
-                    {/* RESEND VERIFICATION */}
-
                     {errorMessage ===
                       "Please verify your email address before logging in." && (
                       <button
@@ -395,8 +389,6 @@ function Login() {
               onSubmit={handleLogin}
             >
 
-              {/* EMAIL */}
-
               <div>
 
                 <label
@@ -423,8 +415,6 @@ function Login() {
 
               </div>
 
-              {/* PASSWORD */}
-
               <div>
 
                 <div className="mb-2 flex items-center justify-between">
@@ -445,8 +435,6 @@ function Login() {
                   </button>
 
                 </div>
-
-                {/* Password input + show/hide button */}
 
                 <div className="relative">
 
@@ -482,8 +470,6 @@ function Login() {
 
               </div>
 
-              {/* REMEMBER ME */}
-
               <label
                 htmlFor="remember"
                 className="flex cursor-pointer items-center gap-2.5"
@@ -501,8 +487,6 @@ function Login() {
                 </span>
 
               </label>
-
-              {/* LOGIN BUTTON */}
 
               <button
                 type="submit"
@@ -534,10 +518,6 @@ function Login() {
 
             </div>
 
-            {/* ===================================================== */}
-            {/* SIGN UP */}
-            {/* ===================================================== */}
-
             <button
               type="button"
               onClick={() => navigate("/signup")}
@@ -545,10 +525,6 @@ function Login() {
             >
               Create an Account
             </button>
-
-            {/* ===================================================== */}
-            {/* FOOTER TEXT */}
-            {/* ===================================================== */}
 
             <p className="mt-6 text-center text-xs leading-5 text-[#2F2A25]/40">
               By continuing, you agree to FoodBridge's terms and
@@ -566,3 +542,4 @@ function Login() {
 }
 
 export default Login;
+
